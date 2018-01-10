@@ -7,4 +7,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => ( // LEARN: .
       ? <Component {...props} />
       : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
   )} />
-)
+);
+
+console.log(PrivateRoute);
+{/* <PrivateRoute exact path="/home" component={Home} /> */}

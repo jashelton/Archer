@@ -15,7 +15,7 @@ function login(username, password) {
     body: JSON.stringify({ username, password })
   };
 
-  return fetch('http://localhost:8080/users', requestOptions)
+  return fetch('http://localhost:8080/login', requestOptions)
     .then(response => {
       if(!response.ok) { // LEARN: where is response.ok? -> returned from backend.  ok: boolean
         return Promise.reject(response.statusText);

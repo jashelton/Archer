@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 import { userActions } from '../actions';
 
@@ -9,6 +8,7 @@ class LoginPage extends React.Component {
 
     // reset login status
     this.props.dispatch(userActions.logout());
+    console.log(this.props);
 
     // initialize state
     this.state = {
@@ -22,17 +22,20 @@ class LoginPage extends React.Component {
   }
 
   handleChange(e) {
-    const { name, value } = e.target.value;
+    const { name, value } = e.target;
     this.setState({ [name]: value });
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log('hello')
 
     this.setState({ submitted: true });
     const { username, password, submitted } = this.state;
     const { dispatch } = this.props; // LEARN: not sure what this is
     if (username && password) {
+      console.log(username);
+      console.log(password);
       dispatch(userActions.login(username, password)) // LEARN: look into dispatch
     }
   }
@@ -43,7 +46,7 @@ class LoginPage extends React.Component {
     return (
       <div className="login-view container">
         <h2>Login</h2>
-        <form name="login-form" onSubmit={this.handleSubmit}>
+        <form name="form" onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="username">Username</label>
             <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
@@ -51,6 +54,9 @@ class LoginPage extends React.Component {
           <div>
             <label htmlFor="password">Password</label>
             <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
+          </div>
+          <div>
+            <button className="btn">Login</button>
           </div>
         </form>
       </div>
