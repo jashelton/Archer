@@ -8,7 +8,6 @@ class LoginPage extends React.Component {
 
     // reset login status
     this.props.dispatch(userActions.logout());
-    console.log(this.props);
 
     // initialize state
     this.state = {
@@ -28,14 +27,11 @@ class LoginPage extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('hello')
 
     this.setState({ submitted: true });
     const { username, password, submitted } = this.state;
     const { dispatch } = this.props; // LEARN: not sure what this is
     if (username && password) {
-      console.log(username);
-      console.log(password);
       dispatch(userActions.login(username, password)) // LEARN: look into dispatch
     }
   }

@@ -6,7 +6,7 @@ export const userService = {
   // getById,
   // update,
   // delete: _delete
-}
+};
 
 function login(username, password) {
   const requestOptions = {

@@ -1,30 +1,20 @@
 import React, { Component } from 'react';
 import { Router, Route } from 'react-router';
 import { connect } from 'react-redux';
-
 import { history } from './helpers';
-
 import logo from './logo.svg';
+
+// Routes
+import { PrivateRoute } from './components';
+import { HomePage } from './Home';
+import { LoginPage } from './Login';
+import './App.css';
 
 // NOTES:
   // .env setup:
     // https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables
 
-// Routes
-import { PrivateRoute } from './components';
-import Home from './Home';
-import { LoginPage } from './Login';
-
-// import { Switch, Route } from 'react-router';
-import './App.css';
-
-function isLoggedIn() {
-  console.log('hello');
-  return false;
-}
-
-class App extends Component { 
-
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -47,14 +37,10 @@ class App extends Component {
         <div className="app-container">
           <Router history={history}>
             <div>
-              <PrivateRoute exact path="/" component={Home} />
+              <PrivateRoute exact path="/" component={HomePage} />
               <Route path="/login" component={LoginPage} />
             </div>
           </Router>
-          {/* <Switch>
-            <Route exact path="/home" render={() => isLoggedIn()}/>
-            <Route exact path="/login" component={LoginPage}/>
-          </Switch> */}
         </div>
       </div>
     );
