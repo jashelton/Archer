@@ -12,7 +12,7 @@ function getAll() {
 
     questionService.getAll()
       .then(
-        data => dispatch(success(data.questions)),
+        questions => dispatch(success(questions.data)),
         error => dispatch(failure(error))
       );
   }

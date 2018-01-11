@@ -8,6 +8,7 @@ import logo from './logo.svg';
 import { PrivateRoute } from './components';
 import { HomePage } from './Home';
 import { LoginPage } from './Login';
+import { QuestionDetailsPage } from './QuestionDetails';
 import './App.css';
 
 // NOTES:
@@ -39,6 +40,8 @@ class App extends Component {
             <div>
               <PrivateRoute exact path="/" component={HomePage} />
               <Route path="/login" component={LoginPage} />
+              {/* Should this route be protected? */}
+              <Route path="/question/:id" component={QuestionDetailsPage} />
             </div>
           </Router>
         </div>

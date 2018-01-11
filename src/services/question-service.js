@@ -13,7 +13,13 @@ function getAll() {
 }
 
 function getById(id) {
+  console.log(id);
+  const requestOptions = {
+    method: 'GET'
+    // Should this be protected?
+  };
 
+  return fetch(`http://localhost:8080/questions/${id}`).then(handleResponse);
 }
 
 function handleResponse(response) {
@@ -23,7 +29,6 @@ function handleResponse(response) {
 
   return response.json();
 }
-
 
 
 // function getById(id) {
