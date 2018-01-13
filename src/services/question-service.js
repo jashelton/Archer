@@ -18,7 +18,7 @@ function getById(id) {
     // Should this be protected?
   };
 
-  return fetch(`http://localhost:8080/questions/${id}`).then(handleResponse);
+  return fetch(`http://localhost:8080/questions/${id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
@@ -28,13 +28,3 @@ function handleResponse(response) {
 
   return response.json();
 }
-
-
-// function getById(id) {
-//   const requestOptions = {
-//       method: 'GET',
-//       headers: authHeader()
-//   };
-
-//   return fetch('/users/' + _id, requestOptions).then(handleResponse);
-// }

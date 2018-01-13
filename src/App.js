@@ -16,19 +16,20 @@ import './App.css';
     // https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    const { dispatch } = this.props;
-    // history.listen((location, action) => {  // not implemented
-    //   // clear alert on location change
-    //   dispatch(alertActions.clear());
-    // });
-  }
+  //   const { dispatch } = this.props;
+  //   history.listen((location, action) => {  // not implemented
+  //     // clear alert on location change
+  //     dispatch(alertActions.clear());
+  //   });
+  // }
 
   render() {
-    const basePath = '/' + window.location.pathname.split('/')[1]; // LEARN: ehhh...?
-    const { alert } = this.props;
+    // const basePath = '/' + window.location.pathname.split('/')[1]; // LEARN: ehhh...?
+    // const { alert } = this.props;
+
     return (
       <div className="App">
         <div className="App-header text-center">

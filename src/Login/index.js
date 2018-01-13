@@ -29,7 +29,8 @@ class LoginPage extends React.Component {
     e.preventDefault();
 
     this.setState({ submitted: true });
-    const { username, password, submitted } = this.state;
+    // const { username, password, submitted } = this.state;
+    const { username, password } = this.state;
     const { dispatch } = this.props; // LEARN: not sure what this is
     if (username && password) {
       dispatch(userActions.login(username, password)) // LEARN: look into dispatch
@@ -37,8 +38,9 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { loggingIn } = this.props; // LEARN: need to check props to see what logginIn is.  For spinner?
-    const { username, password, submitted } = this.state; // LEARN: Why is this here and in the handle submit function?
+     // const { loggingIn } = this.props; // LEARN: need to check props to see what logginIn is.  For spinner?
+    // const { username, password, submitted } = this.state; // LEARN: Why is this here and in the handle submit function?
+    const { username, password } = this.state; // LEARN: Why is this here and in the handle submit function?
     return (
       <div className="login-view container">
         <h2>Login</h2>
