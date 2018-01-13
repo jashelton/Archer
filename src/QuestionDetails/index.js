@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 import { questionActions } from '../actions';
+import { Question } from '../components';
 
 class QuestionDetailsPage extends React.Component {
   componentDidMount() {
@@ -15,16 +16,12 @@ class QuestionDetailsPage extends React.Component {
       <div>
         {question.items &&
           <div>
-            <h1>{question.items.primary_question.question}</h1>
-            {question.items.primary_question.answers.map(a => (
-              <span key={a.id}>{a.answer}</span>
-            ))}
-            {/* Create a question component.  Map over and render it with the answers */}
-            <ul>
+            <Question question={question.items.primary_question} />
+            <div>
               {question.items.secondary_questions.map(q => (
-                <li key={q.id}>{q.question}</li>
+                <Question key={q.id} question={q} />
               ))}
-            </ul>
+            </div>
           </div>
         }
       </div>
