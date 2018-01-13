@@ -13,7 +13,6 @@ function getAll() {
 }
 
 function getById(id) {
-  console.log(id);
   const requestOptions = {
     method: 'GET'
     // Should this be protected?
