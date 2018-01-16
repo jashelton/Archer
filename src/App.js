@@ -9,6 +9,7 @@ import { PrivateRoute } from './components';
 import { HomePage } from './Home';
 import { LoginPage } from './Login';
 import { QuestionDetailsPage } from './QuestionDetails';
+import { ProfilePage } from './ProfilePage';
 import './App.css';
 
 // NOTES:
@@ -43,6 +44,7 @@ class App extends Component {
               <Route path="/login" component={LoginPage} />
               {/* Should this route be protected? */}
               <Route path="/question/:id" component={QuestionDetailsPage} />
+              <Route path="/profile/:user" component={ProfilePage} />
             </div>
           </Router>
         </div>

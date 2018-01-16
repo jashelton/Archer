@@ -10,9 +10,11 @@ export default class HomePage extends React.Component {
   render() {
     // TODO: These are actually polls, not questions.
     const { questions } = this.props;
+
     return (
       <div className="home-view container">
         <Link to="/login">Logout</Link>
+        <Link to={`/profile/${this.props.authentication.user.current_user}`}>My Profile</Link>
         {questions.items &&
           <ul>
             {questions.items.map(q => (
@@ -27,9 +29,9 @@ export default class HomePage extends React.Component {
 
 // LEARN: need to dig into this function -> should help once digging into state
 function mapStateToProps(state) {
-  const { questions } = state;
+  const { questions, authentication } = state;
   return {
-    questions
+    questions, authentication
   };
 }
 
