@@ -8,6 +8,7 @@ import logo from './logo.svg';
 import { PrivateRoute } from './components';
 import { HomePage } from './Home';
 import { LoginPage } from './Login';
+import { RegisterPage } from './Register';
 import { QuestionDetailsPage } from './QuestionDetails';
 import { ProfilePage } from './ProfilePage';
 import './App.css';
@@ -40,9 +41,10 @@ class App extends Component {
         <div className="app-container">
           <Router history={history}>
             <div>
+              {/* Which routes should be protected? */}
               <PrivateRoute exact path="/" component={HomePage} />
               <Route path="/login" component={LoginPage} />
-              {/* Should this route be protected? */}
+              <Route path="/register" component={RegisterPage} />
               <Route path="/question/:id" component={QuestionDetailsPage} />
               <Route path="/profile/:user" component={ProfilePage} />
             </div>
