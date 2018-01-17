@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 import { userActions } from '../actions';
+import { userService } from '../services';
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class RegisterPage extends React.Component {
     console.log(this.state);
 
     if (this.state.password === this.state.confirm_password) {
-      console.log(this.state);
+      userService.register(this.state);
     } else {
       console.log('Passwords do not match, try again.')
     }

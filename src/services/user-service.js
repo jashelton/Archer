@@ -1,7 +1,9 @@
+import { history } from '../helpers';
+
 export const userService = {
   login,
   logout,
-  // register,
+  register,
   // getAll,
   // getById,
   // update,
@@ -34,4 +36,24 @@ function login(username, password) {
 
 function logout() {
   localStorage.removeItem('user');
+}
+
+function register(form) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({data: form})
+  };
+
+  return fetch('http://localhost:8080/register', requestOptions)
+    .then(response => {
+      if(!response.ok) {
+        return Promise.reject(response.statusText);
+      }
+
+      return response.json()
+    })
+    .then(
+      history.push('/login')
+    );
 }
