@@ -6,7 +6,6 @@ import { userService } from '../services';
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     // reset login status
     this.props.dispatch(userActions.logout());
 
@@ -29,12 +28,10 @@ class RegisterPage extends React.Component {
     this.setState({
       [name]: value
     })
-    console.log(this.state);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state);
 
     if (this.state.password === this.state.confirm_password) {
       userService.register(this.state);

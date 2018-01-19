@@ -12,6 +12,8 @@ export class ProfilePage extends React.Component {
       data: null
     };
 
+    // Could display /:username in the url, but pass user_id into the service to prevent the backend from having the get user.
+
   }
 
   componentWillMount() {
