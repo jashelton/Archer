@@ -12,13 +12,14 @@ function getAll() {
   return fetch('http://localhost:8080/questions', requestOptions).then(handleResponse);
 }
 
-function getById(id) {
+function getById(id, user_id) {
+  console.log(user_id);
   const requestOptions = {
     method: 'GET'
     // Should this be protected?
   };
 
-  return fetch(`http://localhost:8080/questions/${id}`, requestOptions).then(handleResponse);
+  return fetch(`http://localhost:8080/questions/${id}?user_id=${user_id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

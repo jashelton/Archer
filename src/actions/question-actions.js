@@ -1,5 +1,6 @@
 import { questionConstants } from '../constants';
 import { questionService } from '../services';
+import { history } from '../helpers/index';
 
 export const questionActions = {
   getAll,
@@ -23,13 +24,19 @@ function getAll() {
   function failure(error) { return { type: questionConstants.GETALL_FAILURE } }
 }
 
-function getById(id) {
+function getById(id, user_id) {
   return dispatch => {
     dispatch(request());
 
-    questionService.getById(id)
+    questionService.getById(id, user_id)
       .then(
-        question => dispatch(success(question.data)),
+        question => {
+          // If user has already taken the poll, redirect them to the results page.
+          if (question.data.has_taken) {
+            history.push(`/results/${id}`)
+          }
+          dispatch(success(question.data))
+        },
         error => dispatch(failure(error))
       );
   }

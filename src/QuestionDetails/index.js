@@ -3,14 +3,21 @@ import { connect } from 'react-redux'; // LEARN: Look into connect
 import { questionActions } from '../actions';
 import { pollService } from '../services';
 
+// TODO: This is a POLL rather than QUESTIONDETAIL
+
 class QuestionDetailsPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      hasTakenPoll: false
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    const question_id = this.props.match.params.id;
+    this.props.dispatch(questionActions.getById(question_id, this.props.authentication.user.current_user.id));
   }
 
   handleChange(event) {
@@ -27,10 +34,10 @@ class QuestionDetailsPage extends React.Component {
     const data = {
       username: this.props.authentication.user.current_user.id,
       poll_id: this.props.question.items.poll_id,
-      form: this.state
+      form: this.state,
     }
 
-
+    console.log(data);
     pollService.submit(data);
 
     // submit this.state to Lana
@@ -40,18 +47,13 @@ class QuestionDetailsPage extends React.Component {
     // Create response id, poll_id, question_id, selected_answer
   }
 
-  componentDidMount() {
-    const question_id = this.props.match.params.id;
-    this.props.dispatch(questionActions.getById(question_id));
-  }
-
   render() {
     // TODO: These are actually polls, not question.
     const { question } = this.props;
 
     return(
       <div>
-        {question.items &&
+        {question.items && !question.items.has_taken &&
           <form onSubmit={this.handleSubmit}>
             <div>
               <h1>{question.items.primary_question.question}</h1>

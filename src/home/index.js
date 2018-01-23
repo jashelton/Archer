@@ -15,7 +15,7 @@ export default class HomePage extends React.Component {
       <div className="home-view container">
         <Link to="/login">Logout</Link>
         <Link to="/register">Register</Link>
-        <Link to={`/profile/${this.props.authentication.user.current_user}`}>My Profile</Link>
+        <Link to={`/profile/${this.props.authentication.user.current_user.username}`}>My Profile</Link>
         {questions.items &&
           <ul>
             {questions.items.map(q => (

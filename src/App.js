@@ -11,6 +11,7 @@ import { LoginPage } from './Login';
 import { RegisterPage } from './Register';
 import { QuestionDetailsPage } from './QuestionDetails';
 import { ProfilePage } from './ProfilePage';
+import { ResultsPage } from './Results';
 import './App.css';
 
 // NOTES:
@@ -47,6 +48,7 @@ class App extends Component {
               <Route path="/register" component={RegisterPage} />
               <Route path="/question/:id" component={QuestionDetailsPage} />
               <Route path="/profile/:user" component={ProfilePage} />
+              <Route path="/results/:id" component={ResultsPage} />
             </div>
           </Router>
         </div>
