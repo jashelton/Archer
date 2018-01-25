@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 import { questionActions } from '../actions';
 import { pollService } from '../services';
+import { history } from '../helpers/index';
 
 // TODO: This is a POLL rather than QUESTIONDETAIL
 
@@ -10,7 +11,6 @@ class QuestionDetailsPage extends React.Component {
     super(props);
 
     this.state = {
-      hasTakenPoll: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,15 +36,10 @@ class QuestionDetailsPage extends React.Component {
       poll_id: this.props.question.items.poll_id,
       form: this.state,
     }
-
-    console.log(data);
-    pollService.submit(data);
-
-    // submit this.state to Lana
-    // {question_id: selected_answer}
-
-    // Create poll event as 'completed' for current poll_id
-    // Create response id, poll_id, question_id, selected_answer
+    pollService.submit(data).then(
+      () => history.replace(`/results/${data.poll_id}`),
+      error => console.log('error', error)
+    );
   }
 
   render() {

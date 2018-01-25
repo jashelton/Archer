@@ -33,7 +33,7 @@ function getById(id, user_id) {
         question => {
           // If user has already taken the poll, redirect them to the results page.
           if (question.data.has_taken) {
-            history.push(`/results/${id}`)
+            history.replace(`/results/${id}`);
           }
           dispatch(success(question.data))
         },

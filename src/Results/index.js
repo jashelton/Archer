@@ -21,7 +21,6 @@ export class ResultsPage extends React.Component {
 
   render() {
     const { results } = this.state;
-    console.log(results);
     return(
       <div>
         {
@@ -29,6 +28,16 @@ export class ResultsPage extends React.Component {
           <div>
             Hello from results component.
             <span>Number of responses: {this.state.results.responses}</span>
+            <div>
+              {results.questions.map(q => (
+                <div key={q.id}>
+                  <div>{q.question}</div>
+                  {q.answers.map(a => (
+                    <div key={a.id}>{a.answer} - {a.response_count}</div>
+                  ))}
+                </div>  
+              ))}
+            </div>
           </div>
         }
       </div>
