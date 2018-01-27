@@ -13,9 +13,7 @@ export default class HomePage extends React.Component {
 
     return (
       <div className="home-view container">
-        <Link to="/login">Logout</Link>
         <Link to="/register">Register</Link>
-        <Link to={`/profile/${this.props.authentication.user.current_user.username}`}>My Profile</Link>
         {questions.items &&
           <ul>
             {questions.items.map(q => (
@@ -30,9 +28,9 @@ export default class HomePage extends React.Component {
 
 // LEARN: need to dig into this function -> should help once digging into state
 function mapStateToProps(state) {
-  const { questions, authentication } = state;
+  const { questions } = state;
   return {
-    questions, authentication
+    questions
   };
 }
 
