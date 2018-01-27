@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
-import { Link } from 'react-router-dom';
 import { questionActions } from '../actions';
+import Poll from '../components/Poll.js';
 
 export default class HomePage extends React.Component {
   componentDidMount() {
@@ -13,15 +13,16 @@ export default class HomePage extends React.Component {
 
     return (
       <div className="home-view container">
-        <Link to="/login">Logout</Link>
-        <Link to="/register">Register</Link>
-        <Link to={`/profile/${this.props.authentication.user.current_user.username}`}>My Profile</Link>
+        {/* <Link to="/register">Register</Link> */}
         {questions.items &&
-          <ul>
+          // <ul>
+          <div>
             {questions.items.map(q => (
-              <li key={q.id}><Link to={`/question/${q.id}`}>{q.question}</Link></li>
+              <Poll key={q.id} question={q}/>
+              // <li key={q.id}><Link to={`/question/${q.id}`}>{q.question}</Link></li>
             ))}
-          </ul>
+          </div>
+          // </ul>
         }
       </div>
     );
@@ -30,9 +31,9 @@ export default class HomePage extends React.Component {
 
 // LEARN: need to dig into this function -> should help once digging into state
 function mapStateToProps(state) {
-  const { questions, authentication } = state;
+  const { questions } = state;
   return {
-    questions, authentication
+    questions
   };
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { resultsService } from '../services';
+import { PlotlyPieChart } from '../components';
 
 export class ResultsPage extends React.Component {
   constructor(props) {
@@ -19,8 +20,19 @@ export class ResultsPage extends React.Component {
       )
   }
 
+  handleClick(e) {
+    console.log(e);
+    console.log('clicked');
+  }
+
+  handleSelected(e) {
+    console.log(e);
+    console.log('selected');
+  }
+
   render() {
     const { results } = this.state;
+
     return(
       <div>
         {
@@ -28,16 +40,9 @@ export class ResultsPage extends React.Component {
           <div>
             Hello from results component.
             <span>Number of responses: {this.state.results.responses}</span>
-            <div>
-              {results.questions.map(q => (
-                <div key={q.id}>
-                  <div>{q.question}</div>
-                  {q.answers.map(a => (
-                    <div key={a.id}>{a.answer} - {a.response_count}</div>
-                  ))}
-                </div>  
-              ))}
-            </div>
+            {results.questions.map(q => (
+              <PlotlyPieChart key={q.id} question={q} />
+            ))}
           </div>
         }
       </div>
