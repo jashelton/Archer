@@ -1,35 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Router } from 'react-router';
+import { history } from '../helpers'
+import Icon from 'material-ui/Icon';
+
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import InboxIcon from 'material-ui-icons/MoveToInbox';
-import DraftsIcon from 'material-ui-icons/Drafts';
-import StarIcon from 'material-ui-icons/Star';
-import SendIcon from 'material-ui-icons/Send';
+import { routerItems } from '../router-items.js';
 
 export const NavItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <InboxIcon />
-      </ListItemIcon>
-      <ListItemText primary="Inbox" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <StarIcon />
-      </ListItemIcon>
-      <ListItemText primary="Starred" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <SendIcon />
-      </ListItemIcon>
-      <ListItemText primary="Send mail" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <DraftsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Drafts" />
-    </ListItem>
+    <Router history={history}>
+      <div>
+        {routerItems.map(item => (
+          <ListItem key={item.viewValue} button component={Link} to={item.route}>
+            <ListItemIcon>
+              <Icon>{item.icon}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={item.viewValue} />
+          </ListItem>
+        ))}
+      </div>
+    </Router>
   </div>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
-import { Link } from 'react-router-dom';
 import { questionActions } from '../actions';
+import Poll from '../components/Poll.js';
 
 export default class HomePage extends React.Component {
   componentDidMount() {
@@ -13,13 +13,16 @@ export default class HomePage extends React.Component {
 
     return (
       <div className="home-view container">
-        <Link to="/register">Register</Link>
+        {/* <Link to="/register">Register</Link> */}
         {questions.items &&
-          <ul>
+          // <ul>
+          <div>
             {questions.items.map(q => (
-              <li key={q.id}><Link to={`/question/${q.id}`}>{q.question}</Link></li>
+              <Poll key={q.id} question={q}/>
+              // <li key={q.id}><Link to={`/question/${q.id}`}>{q.question}</Link></li>
             ))}
-          </ul>
+          </div>
+          // </ul>
         }
       </div>
     );
