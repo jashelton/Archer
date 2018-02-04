@@ -21,7 +21,7 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
 import RouterTest from '../router.js';
-import { NavItems } from './NavData.js';
+import { NavItems, SecondaryNavItems } from './NavData.js';
 
 const drawerWidth = 240;
 
@@ -180,6 +180,7 @@ class AppLayout extends React.Component {
                     <Router history={history}>
                       <div>
                         <MenuItem onClick={this.handleClose}><Link to={`/profile/${this.props.authentication.user.current_user.username}`}>My Profile</Link></MenuItem>
+                        <MenuItem onClick={this.handleClose}><Link to={'/login'}>Logout</Link></MenuItem>
                         <MenuItem onClick={this.handleClose}>My account</MenuItem>
                       </div>
                     </Router>
@@ -204,6 +205,7 @@ class AppLayout extends React.Component {
               <Divider />
               <List className={classes.list}>{NavItems}</List>
               <Divider />
+              <List className={classes.list}>{SecondaryNavItems}</List>
               {/* <List className={classes.list}>{otherMailFolderListItems}</List> */}
             </div>
           </Drawer>

@@ -4,4 +4,12 @@ export const routerItems = [
     route: '/',
     icon: 'home'
   }
-]
+];
+
+export const secondaryRouterItems = [
+  {
+    viewValue: 'Create Poll',
+    route: '/new-poll',
+    icon: 'add'
+  }
+];

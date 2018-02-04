@@ -5,6 +5,7 @@ import { history } from './helpers'
 // Routes
 import { PrivateRoute } from './components';
 import { HomePage } from './Home';
+import { CreatePage } from './New';
 import { LoginPage } from './Login';
 import { RegisterPage } from './Register';
 import { QuestionDetailsPage } from './QuestionDetails';
@@ -18,6 +19,7 @@ export default class RouterTest extends React.Component {
         <div>
           {/* Which routes should be protected? */}
           <Route exact path="/" component={HomePage} />
+          <PrivateRoute exact path="/new-poll" component={CreatePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <PrivateRoute path="/question/:id" component={QuestionDetailsPage} />
