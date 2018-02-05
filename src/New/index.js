@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 
+import Question from '../components/Question.js';
+
 class CreatePage extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,7 @@ class CreatePage extends React.Component {
   render() {
     return(
       <div>
-        New Poll
+        <Question />
       </div>
     )
   }
