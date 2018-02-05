@@ -2,22 +2,44 @@ import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 
 import Question from '../components/Question.js';
+import { NewQuestion } from '../models/question.model.js';
+import Button from 'material-ui/Button';
 
 class CreatePage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    this.state = {
-      auth: this.props.authentication
-    }
 
-    console.log(this.state);
+    this.state = {
+      auth: this.props.authentication,
+      form: []
+    };
+
+    this.handleAddQuestion = this.handleAddQuestion.bind(this);
+  }
+
+  componentWillMount() {
+    const initialForm = [];
+    for (let i = 0; i < 2; i++) {
+      initialForm.push(new NewQuestion());
+    }
+    this.setState({form: initialForm});
+  }
+
+  handleAddQuestion() {
+    this.setState({form: this.state.form.concat(new NewQuestion())});
   }
 
   render() {
+    const { form } = this.state;
+
     return(
       <div>
-        <Question />
+        {form.map((question, index) => (
+          <Question key={index} index={index} question={question} form={form} />
+        ))}
+          <Button dense raised={true} color="primary" onClick={this.handleAddQuestion}>
+            Add Question
+          </Button>
       </div>
     )
   }
