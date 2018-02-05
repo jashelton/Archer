@@ -5,7 +5,7 @@ import { history } from './helpers'
 // Routes
 import { PrivateRoute } from './components';
 import { HomePage } from './Home';
-import { CreatePage } from './New';
+import CreatePage from './New/index.js';
 import { LoginPage } from './Login';
 import { RegisterPage } from './Register';
 import { QuestionDetailsPage } from './QuestionDetails';
