@@ -57,6 +57,8 @@ class CreatePage extends React.Component {
 
   render() {
     const { form } = this.state;
+    const { classes } = this.props;
+    console.log(this.props);
 
     return(
       <div>
@@ -64,7 +66,7 @@ class CreatePage extends React.Component {
           {form.map((question, index) => (
             <Question key={index} index={index} question={question} form={form} />
           ))}
-          <Button type="button" dense raised={true} color="primary" onClick={this.handleAddQuestion}>
+          <Button type="button" dense raised={true} color="primary" className={classes.flex} onClick={this.handleAddQuestion}>
             Add Question
           </Button>
           <Button dense raised={true} color="primary" onClick={this.handleSubmit}>

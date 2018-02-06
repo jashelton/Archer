@@ -6,8 +6,13 @@ import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
+import Grid from 'material-ui/Grid';
 
 const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    marginTop: 30,
+  },
   card: {
     width: '100%',
     marginBottom: '25px'
@@ -22,12 +27,16 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    // width: 200,
-    width: '50%'
+    flex: 1,
+    width: '100%'
   },
   menu: {
     width: 200,
   },
+  wrapper: {
+    display: 'flex',
+    flex: 1
+  }
 });
 
 class Question extends React.Component {
@@ -67,34 +76,35 @@ class Question extends React.Component {
     const { classes, index, question } = this.props;
 
     return(
-      <div>
+      <div className={classes.root}>
         <Card className={classes.card}>
           <CardHeader
             title={index === 0 ? 'Primary Question' : 'Secondary Question'}
-            subheader='subheader'
-          />
+            subheader='subheader'/>
           <CardContent>
-            <TextField
-              id="question"
-              label="Question"
-              className={classes.textField}
-              value={question.name}
-              onChange={this.handleQuestionChange(index)}
-              margin="normal"
-            />
-            <Typography type="headline" component="h2">
-              {question.answers.map((answer, i) => (
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
                 <TextField
-                  key={i}
-                  id="name"
-                  label="Answer Option"
+                  id="question"
+                  label="Question"
                   className={classes.textField}
-                  value={answer.name}
-                  onChange={this.handleAnswerChange(i)}
-                  margin="normal"
-                />
+                  value={question.name}
+                  onChange={this.handleQuestionChange(index)}
+                  margin="normal"/>
+              </Grid>
+              {question.answers.map((answer, i) => (
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    key={i}
+                    id="name"
+                    label="Answer Option"
+                    className={classes.textField}
+                    value={answer.name}
+                    onChange={this.handleAnswerChange(i)}
+                    margin="normal"/>
+                </Grid>
               ))}
-            </Typography>
+            </Grid>
           </CardContent>
           <CardActions>
             <span className={classes.flex}></span>
