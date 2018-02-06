@@ -5,6 +5,8 @@ import { withStyles } from 'material-ui/styles';
 import Question from '../components/Question.js';
 import { NewQuestion } from '../models/question.model.js';
 import Button from 'material-ui/Button';
+import { pollService } from '../services';
+import { history } from '../helpers/index';
 
 const styles = theme => ({
   flex: {
@@ -46,8 +48,11 @@ class CreatePage extends React.Component {
       author: this.state.auth.user.current_user.id,
       questions: this.state.form
     };
-    
-    console.log(newPoll);
+
+    pollService.create(newPoll).then(
+      (res) => history.replace(`/question/${res.data}`),
+      error => console.log('error', error)
+    );
   }
 
   render() {

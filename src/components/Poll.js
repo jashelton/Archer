@@ -10,16 +10,11 @@ import Typography from 'material-ui/Typography';
 const styles = {
   card: {
     width: '100%',
+    marginBottom: '25px'
   },
 };
 
 class Poll extends React.Component {
-  constructor(props) {
-    super(props);
-
-    console.log(this.props);
-  }
-
   render() {
     const { classes, question } = this.props;
 
