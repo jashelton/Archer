@@ -14,7 +14,9 @@ class PlotlyPieChart extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(e) {
+  handleClick(e, id) {
+    console.log(e);
+    console.log(id);
     this.props.addFilter(e.points[0].label);
     this.props.dispatch(filterActions.addFilter(e.points[0].label));
   }
@@ -39,7 +41,7 @@ class PlotlyPieChart extends React.Component {
               height: 400,
               width: 500
             }}
-            onClick={this.handleClick}
+            onClick={(e) => this.handleClick(e, question.id)}
           />
         </CardContent>
       </Card>
