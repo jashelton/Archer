@@ -1,14 +1,18 @@
 import React from 'react';
 import { resultsService } from '../services';
 import { PlotlyPieChart } from '../components';
+import Filters from '../components/Filters.js';
 
 export class ResultsPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      results: null
+      results: null,
+      filters: []
     };
+
+    this.addFilter = this.addFilter.bind(this);
   }
 
   componentWillMount() {
@@ -20,28 +24,25 @@ export class ResultsPage extends React.Component {
       )
   }
 
-  handleClick(e) {
-    console.log(e);
-    console.log('clicked');
-  }
+  addFilter(filter) {
+    let filters = this.state.filters;
 
-  handleSelected(e) {
-    console.log(e);
-    console.log('selected');
+    filters.push({key: filters.length, label: filter});
+    this.setState({filters});
   }
 
   render() {
-    const { results } = this.state;
+    const { results, filters } = this.state;
 
     return(
       <div>
+        <Filters filters={filters} /> 
         {
           results &&
           <div>
-            Hello from results component.
             <span>Number of responses: {this.state.results.responses}</span>
             {results.questions.map(q => (
-              <PlotlyPieChart key={q.id} question={q} />
+              <PlotlyPieChart key={q.id} question={q} addFilter={this.addFilter} />
             ))}
           </div>
         }

@@ -8,6 +8,18 @@ import createPlotlyComponent from 'react-plotly.js/factory'
 const Plot = createPlotlyComponent(Plotly);
 
 export class PlotlyPieChart extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    console.log(e);
+    this.props.addFilter(e.points[0].label);
+  }
+
   render() {
     const { question } = this.props;
     
@@ -29,7 +41,6 @@ export class PlotlyPieChart extends React.Component {
               width: 500
             }}
             onClick={this.handleClick}
-            onSelected={this.handleSelected}
           />
         </CardContent>
       </Card>
