@@ -58,7 +58,6 @@ class CreatePage extends React.Component {
   render() {
     const { form } = this.state;
     const { classes } = this.props;
-    console.log(this.props);
 
     return(
       <div>

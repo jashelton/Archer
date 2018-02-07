@@ -92,9 +92,8 @@ class Question extends React.Component {
                   margin="normal"/>
               </Grid>
               {question.answers.map((answer, i) => (
-                <Grid item xs={12} sm={6}>
+                <Grid key={i} item xs={12} sm={6}>
                   <TextField
-                    key={i}
                     id="name"
                     label="Answer Option"
                     className={classes.textField}
