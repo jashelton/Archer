@@ -1,6 +1,6 @@
 import React from 'react';
 import { resultsService } from '../services';
-import { PlotlyPieChart } from '../components';
+import { PlotlyPieChart } from '../components/PlotlyPieChart.js';
 import Filters from '../components/Filters.js';
 
 export class ResultsPage extends React.Component {

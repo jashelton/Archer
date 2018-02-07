@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { filterActions } from '../actions';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
@@ -7,7 +10,6 @@ import Paper from 'material-ui/Paper';
 const styles = theme => ({
   root: {
     display: 'flex',
-    justifyContent: 'center',
     flexWrap: 'wrap',
     padding: theme.spacing.unit / 2,
   },
@@ -17,16 +19,12 @@ const styles = theme => ({
 });
 
 class Filters extends React.Component {
-  state = {
-    chipData: this.props.filters
-  };
+  componentWillMount() {
+    this.props.dispatch(filterActions.getFilters());
+  }
 
   handleDelete = data => () => {
-    const chipData = [...this.state.chipData];
-    const chipToDelete = chipData.indexOf(data);
-
-    chipData.splice(chipToDelete, 1);
-    this.setState({ chipData });
+    this.props.dispatch(filterActions.deleteFilter(data));
   };
 
   render() {
@@ -34,11 +32,11 @@ class Filters extends React.Component {
 
     if (filters.length > 0) {
       return  <Paper className={classes.root}>
-                {this.state.chipData.map(data => {
+                {filters.map((data, index)=> {
                   return (
                     <Chip
-                      key={data.key}
-                      label={data.label}
+                      key={index}
+                      label={data}
                       onDelete={this.handleDelete(data)}
                       className={classes.chip}
                     />
@@ -55,4 +53,9 @@ Filters.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Filters);
+function mapStateToProps(state) {
+  const { filters } = state;
+  return { filters };
+}
+
+export default compose(withStyles(styles), connect(mapStateToProps))(Filters);

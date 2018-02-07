@@ -1,14 +1,13 @@
 import React from 'react';
-
+import { connect } from 'react-redux'; // LEARN: Look into connect
+import { filterActions } from '../actions';
 import Card, { CardHeader, CardContent } from 'material-ui/Card';
-
 /* global Plotly:true */
 import createPlotlyComponent from 'react-plotly.js/factory'
-/* (Note that Plotly is already defined from loading plotly.js through a <script> tag) */
+
 const Plot = createPlotlyComponent(Plotly);
 
-export class PlotlyPieChart extends React.Component {
-
+class PlotlyPieChart extends React.Component {
   constructor(props) {
     super(props);
 
@@ -16,8 +15,8 @@ export class PlotlyPieChart extends React.Component {
   }
 
   handleClick(e) {
-    console.log(e);
     this.props.addFilter(e.points[0].label);
+    this.props.dispatch(filterActions.addFilter(e.points[0].label));
   }
 
   render() {
@@ -47,3 +46,12 @@ export class PlotlyPieChart extends React.Component {
     )
   }
 }
+
+// LEARN: need to dig into this function -> should help once digging into state
+function mapStateToProps(state) {
+  const { filters } = state;
+  return { filters };
+}
+
+const connectedPlotlyPieChart = connect(mapStateToProps)(PlotlyPieChart); // LEARN: unclear
+export { connectedPlotlyPieChart as PlotlyPieChart }; // LEARN: why?
