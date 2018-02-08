@@ -14,11 +14,9 @@ class PlotlyPieChart extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(e, id) {
-    console.log(e);
-    console.log(id);
-    this.props.addFilter(e.points[0].label);
+  handleClick(e) {
     this.props.dispatch(filterActions.addFilter(e.points[0].label));
+    this.props.updateQuestion();
   }
 
   render() {
@@ -41,7 +39,7 @@ class PlotlyPieChart extends React.Component {
               height: 400,
               width: 500
             }}
-            onClick={(e) => this.handleClick(e, question.id)}
+            onClick={this.handleClick}
           />
         </CardContent>
       </Card>
@@ -49,11 +47,10 @@ class PlotlyPieChart extends React.Component {
   }
 }
 
-// LEARN: need to dig into this function -> should help once digging into state
 function mapStateToProps(state) {
-  const { filters } = state;
-  return { filters };
+  const { filters, authentication } = state;
+  return { filters, authentication };
 }
 
-const connectedPlotlyPieChart = connect(mapStateToProps)(PlotlyPieChart); // LEARN: unclear
-export { connectedPlotlyPieChart as PlotlyPieChart }; // LEARN: why?
+const connectedPlotlyPieChart = connect(mapStateToProps)(PlotlyPieChart);
+export { connectedPlotlyPieChart as PlotlyPieChart };

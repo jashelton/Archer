@@ -10,7 +10,7 @@ import { LoginPage } from './Login';
 import { RegisterPage } from './Register';
 import { QuestionDetailsPage } from './QuestionDetails';
 import { ProfilePage } from './ProfilePage';
-import { ResultsPage } from './Results';
+import { ResultsPage } from './Results/index.js';
 
 export default class RouterTest extends React.Component {
   render() {

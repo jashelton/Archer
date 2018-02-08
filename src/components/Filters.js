@@ -23,8 +23,18 @@ class Filters extends React.Component {
     this.props.dispatch(filterActions.getFilters());
   }
 
-  handleDelete = data => () => {
+  handleDelete (data) {
     this.props.dispatch(filterActions.deleteFilter(data));
+    setTimeout(() => {
+      // TODO: Should handle this on the backend instead.  Use same method?
+      if (this.props.filters.length) {
+        this.props.updateQuestion();
+      } else {
+        this.props.getPoll();
+      }
+      
+  }, 15); 
+    // this.props.updateQuestion();
   };
 
   render() {
@@ -37,7 +47,7 @@ class Filters extends React.Component {
                     <Chip
                       key={index}
                       label={data}
-                      onDelete={this.handleDelete(data)}
+                      onDelete={() => this.handleDelete(data)}
                       className={classes.chip}
                     />
                   );
@@ -54,8 +64,8 @@ Filters.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { filters } = state;
-  return { filters };
+  const { filters, authentication } = state;
+  return { filters, authentication };
 }
 
 export default compose(withStyles(styles), connect(mapStateToProps))(Filters);

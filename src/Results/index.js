@@ -1,48 +1,65 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { resultsService } from '../services';
 import { PlotlyPieChart } from '../components/PlotlyPieChart.js';
 import Filters from '../components/Filters.js';
 
-export class ResultsPage extends React.Component {
+class ResultsPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       results: null,
-      filters: []
+      poll_id: this.props.match.params.id,
     };
 
-    this.addFilter = this.addFilter.bind(this);
+    this.getPoll();
+    this.getPoll = this.getPoll.bind(this);
+    this.update = this.update.bind(this);
   }
 
-  componentWillMount() {
-    const poll_id = this.props.match.params.id;
-    resultsService.getById(poll_id)
+  getPoll() {
+    resultsService.getById(this.state.poll_id)
       .then(
-        result => { this.setState( {results: result.data })},
+        result => { this.setState({ results: result.data })},
         error => console.log('error', error) // If the poll doesn't exist, should redirect to 404
       )
   }
 
-  addFilter(filter) {
-    let filters = this.state.filters;
-
-    filters.push({key: filters.length, label: filter});
-    this.setState({filters});
+  update() {
+    let data = {
+      poll_id: this.state.poll_id,
+      user_id: this.props.authentication.user.current_user.id,
+      filters: this.props.filters
+    };
+    resultsService.updateFilters(data)
+      .then(
+        result => { console.log(result); this.setState({ results: result.data })},
+        error => console.log('error', error) // If the poll doesn't exist, should redirect to 404
+      );
   }
 
   render() {
-    const { results, filters } = this.state;
+    const { results } = this.state;
 
     return(
       <div>
-        <Filters filters={filters} /> 
+        <Filters
+          poll_id={this.state.poll_id}
+          getPoll={this.getPoll}
+          updateQuestion={this.update}
+        /> 
         {
           results &&
           <div>
             <span>Number of responses: {this.state.results.responses}</span>
             {results.questions.map(q => (
-              <PlotlyPieChart key={q.id} question={q} addFilter={this.addFilter} />
+              <PlotlyPieChart
+                key={q.id}
+                question={q}
+                poll_id={this.state.poll_id}
+                updateQuestion={this.update}
+              />
             ))}
           </div>
         }
@@ -50,3 +67,11 @@ export class ResultsPage extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  const { filters, authentication } = state;
+  return { filters, authentication };
+}
+
+const connectedResultsPage = connect(mapStateToProps)(ResultsPage);
+export { connectedResultsPage as ResultsPage };
