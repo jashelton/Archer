@@ -61,7 +61,7 @@ class QuestionDetailsPage extends React.Component {
             </div>
             <div>
               {question.items.secondary_questions.map(sq => (
-                <div key={sq.id}>
+                <div key={sq.question_id}>
                   <h2>{sq.question}</h2>
                   {sq.answers.map(a => (
                     <div key={a.id}>

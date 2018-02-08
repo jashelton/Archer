@@ -22,25 +22,34 @@ export class ProfilePage extends React.Component {
 
     profileService.created(user)
       .then(
-        polls => { this.setState({data: polls.data})},
+        polls => { this.setState({data: polls.data}) },
         error => console.log('error', error) // If the user doesn't exist, should redirect to 404
       )
   }
 
   render() {
-    const polls = this.state['data'];
+    const { data, user } = this.state;
 
     return(
       <div>
         {
-          this.state.data &&
+          data &&
           <div>
-            <h1>Polls created by {this.state.user}</h1>
+            <h1>Polls created by {user}</h1>
             <ul>
-              {polls.map(p => (
+              {data.created_polls.map(p => (
                 <li key={p.poll_id}><Link to={`/question/${p.poll_id}`}>{p.question}</Link></li>
               ))}
             </ul>
+
+            <div>
+              <h2>Polls taken:</h2>
+              <ul>
+                {data.taken_polls.map(p => (
+                  <li key={p.poll_id}><Link to={`/question/${p.poll_id}`}>{p.question}</Link></li>
+                ))}
+              </ul>
+            </div>
           </div>
         }
       </div>

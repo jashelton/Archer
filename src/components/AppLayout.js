@@ -187,6 +187,16 @@ class AppLayout extends React.Component {
                   </Menu>
                 </div>
               )}
+              {
+                !authentication.loggedIn && (
+                  <Router history={history}>
+                    <div>
+                      <Link to={'/login'}>Login</Link>
+                      <Link to={'/register'}>Register</Link>
+                    </div>
+                  </Router>
+                )
+              }
             </Toolbar>
           </AppBar>
           <Drawer
