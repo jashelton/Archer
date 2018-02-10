@@ -10,8 +10,8 @@ import { LoginPage } from './Login';
 import { RegisterPage } from './Register';
 import { QuestionDetailsPage } from './QuestionDetails';
 import { ProfilePage } from './ProfilePage';
-import { ResultsPage } from './Results/index.js';
 import { BookmarkPage } from './BookmarkPage';
+import ViewComponent from './Poll/View/view.component.js';
 
 export default class RouterTest extends React.Component {
   render() {
@@ -25,7 +25,7 @@ export default class RouterTest extends React.Component {
           <Route path="/register" component={RegisterPage} />
           <PrivateRoute path="/question/:id" component={QuestionDetailsPage} />
           <Route path="/profile/:user" component={ProfilePage} />
-          <PrivateRoute path="/results/:id" component={ResultsPage} />
+          <PrivateRoute path="/results/:id" component={ViewComponent} />
           <PrivateRoute path="/my-list" component={BookmarkPage} />
         </div>
       </Router>
