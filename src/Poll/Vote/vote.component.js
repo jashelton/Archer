@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
-import { questionActions } from '../actions';
-import { pollService } from '../services';
-import { history } from '../helpers/index';
+import { questionActions } from '../../actions';
+import { pollService } from '../../services';
+import { history } from '../../helpers/index';
 
 // TODO: This is a POLL rather than QUESTIONDETAIL
 
-class QuestionDetailsPage extends React.Component {
+class VoteComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -88,5 +88,5 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedQuestionDetailsPage = connect(mapStateToProps)(QuestionDetailsPage); // LEARN: unclear
-export { connectedQuestionDetailsPage as QuestionDetailsPage }; // LEARN: why?
+const connectedVoteComponent = connect(mapStateToProps)(VoteComponent); // LEARN: unclear
+export { connectedVoteComponent as VoteComponent }; // LEARN: why?

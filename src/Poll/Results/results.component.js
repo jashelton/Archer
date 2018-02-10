@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { resultsService } from '../services';
-import { PlotlyPieChart } from '../components/PlotlyPieChart.js';
-import Filters from '../components/Filters.js';
+import { resultsService } from '../../services';
+import { PlotlyPieChart } from '../../components/PlotlyPieChart.js';
+import Filters from '../../components/Filters.js';
 
-class ResultsPage extends React.Component {
+class ResultsComponent extends React.Component {
   constructor(props) {
     super(props);
-
+    console.log(props);
     this.state = {
       results: null,
-      poll_id: this.props.match.params.id,
+      poll_id: props.poll_id,
     };
 
     this.getPoll();
@@ -73,5 +73,5 @@ function mapStateToProps(state) {
   return { filters, authentication };
 }
 
-const connectedResultsPage = connect(mapStateToProps)(ResultsPage);
-export { connectedResultsPage as ResultsPage };
+const connectedResultsComponent = connect(mapStateToProps)(ResultsComponent);
+export { connectedResultsComponent as ResultsComponent };
