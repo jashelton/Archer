@@ -7,7 +7,7 @@ import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
 
 import { ResultsComponent } from '../Results/results.component';
-import { VoteComponent } from '../';
+import { ThreadComponent, PreviewComponent } from '../';
 
 
 const styles = theme => ({
@@ -47,7 +47,8 @@ class ViewComponent extends React.Component {
         </Paper>
         <Paper className={classes.root}>
           {value === 0 && <ResultsComponent poll_id={this.state.poll_id} />}
-          {value === 1 && <VoteComponent />}
+          {value === 1 && <ThreadComponent />}
+          {value === 2 && <PreviewComponent />}
         </Paper>
       </div>
     );

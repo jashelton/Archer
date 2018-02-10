@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux'; // LEARN: Look into connect
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Question from '../components/Question.js';
-import { NewQuestion } from '../models/question.model.js';
 import Button from 'material-ui/Button';
-import { pollService } from '../services';
-import { history } from '../helpers/index';
+
+import Question from '../../components/Question.js';
+import { NewQuestion } from '../../models/question.model.js';
+import { pollService } from '../../services';
+import { history } from '../../helpers/index';
 
 const styles = theme => ({
   flex: {
@@ -18,7 +19,7 @@ const styles = theme => ({
   },
 });
 
-class CreatePage extends React.Component {
+class NewComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -77,7 +78,7 @@ class CreatePage extends React.Component {
   }
 }
 
-CreatePage.propTypes = {
+NewComponent.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -90,5 +91,5 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedCreatePage = connect(mapStateToProps)(CreatePage); // LEARN: unclear
-export default withStyles(styles)(connectedCreatePage);
+const connectedNewComponent = connect(mapStateToProps)(NewComponent); // LEARN: unclear
+export default withStyles(styles)(connectedNewComponent);
