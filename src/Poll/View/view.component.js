@@ -6,7 +6,7 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
 
-import { ResultsComponent } from '../Results/results.component';
+import ResultsComponent from '../Results/results.component';
 import { ThreadComponent, PreviewComponent } from '../';
 
 
@@ -45,11 +45,11 @@ class ViewComponent extends React.Component {
             <Tab label="Preview" />
           </Tabs>
         </Paper>
-        <Paper className={classes.root}>
+        <div className={classes.root}>
           {value === 0 && <ResultsComponent poll_id={this.state.poll_id} />}
           {value === 1 && <ThreadComponent />}
           {value === 2 && <PreviewComponent />}
-        </Paper>
+        </div>
       </div>
     );
   }

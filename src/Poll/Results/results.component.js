@@ -1,13 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+
 import { resultsService } from '../../services';
 import { PlotlyPieChart } from '../../components/PlotlyPieChart.js';
 import Filters from '../../components/Filters.js';
 
+import Grid from 'material-ui/Grid';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    marginTop: 30,
+  }
+});
+
 class ResultsComponent extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
+
     this.state = {
       results: null,
       poll_id: props.poll_id,
@@ -32,14 +45,16 @@ class ResultsComponent extends React.Component {
       user_id: this.props.authentication.user.current_user.id,
       filters: this.props.filters
     };
+
     resultsService.updateFilters(data)
       .then(
-        result => { console.log(result); this.setState({ results: result.data })},
+        result => { this.setState({ results: result.data })},
         error => console.log('error', error) // If the poll doesn't exist, should redirect to 404
       );
   }
 
   render() {
+    const { classes } = this.props;
     const { results } = this.state;
 
     return(
@@ -51,16 +66,21 @@ class ResultsComponent extends React.Component {
         /> 
         {
           results &&
-          <div>
-            <span>Number of responses: {this.state.results.responses}</span>
-            {results.questions.map(q => (
-              <PlotlyPieChart
-                key={q.id}
-                question={q}
-                poll_id={this.state.poll_id}
-                updateQuestion={this.update}
-              />
-            ))}
+          <div className={classes.root}>
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
+                <span>Number of responses: {this.state.results.responses}</span>
+              </Grid>
+              {results.questions.map(q => (
+                <Grid key={q.id} item xs={12} sm={6}>
+                  <PlotlyPieChart
+                    question={q}
+                    poll_id={this.state.poll_id}
+                    updateQuestion={this.update}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </div>
         }
       </div>
@@ -68,10 +88,13 @@ class ResultsComponent extends React.Component {
   }
 }
 
+ResultsComponent.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
 function mapStateToProps(state) {
-  const { filters, authentication } = state;
-  return { filters, authentication };
+  const { authentication, filters } = state;
+  return { authentication, filters };
 }
 
-const connectedResultsComponent = connect(mapStateToProps)(ResultsComponent);
-export { connectedResultsComponent as ResultsComponent };
+export default compose(withStyles(styles), connect(mapStateToProps))(ResultsComponent);
