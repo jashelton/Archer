@@ -74,16 +74,10 @@ class Poll extends React.Component {
             on {question.created_at}
           </Typography>
           <Typography component="p">
-            {question.responses} response{question.responses > 1 ? 's' : ''}
-          </Typography>
-          <Typography component="p">
-            Number of follow up questions
-          </Typography>
-          <Typography component="p">
-            upvotes/downvotes
-          </Typography>
-          <Typography component="p">
-            Tags associated with poll
+            <span>{question.responses} response{question.responses !== 1 ? 's' : ''}</span>
+            <span>X total questions</span>
+            <span>upvotes/downvotes</span>
+            <span>Tag</span>
           </Typography>
         </CardContent>
         <CardActions>

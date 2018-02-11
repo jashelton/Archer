@@ -44,16 +44,55 @@ class NewComponent extends React.Component {
     this.setState({form: this.state.form.concat(new NewQuestion())});
   }
 
+  validate(questions) {
+    let fields = [];
+
+    if (questions[0].name === '' ||
+        questions[1].name === '' ||
+        questions[0].answers[0].name === '' ||
+        questions[0].answers[1].name === '' ||
+        questions[1].answers[0].name === '' ||
+        questions[1].answers[1].name === '' ) {
+          return { error: 'You must submit a valid poll' };
+        }
+      questions.forEach((q, i) => {
+      q.name === '' ? fields.push('invalid') : fields.push('valid')
+      q.answers.forEach((a, j) => {
+        if (a.name === '') {
+          fields[i] = 'invalid';
+        }
+      });
+    });
+
+    const containsInvalid = fields.indexOf('invalid');
+
+    if (containsInvalid > -1) {
+      return {
+        message: 'Valid poll with invalid fields',
+        invalidFields: fields
+      };
+    };
+
+    return {
+      message: 'Valid poll',
+      invalidFields: false
+    };
+  }
+
   handleSubmit() {
     let newPoll = {
       author: this.state.auth.user.current_user.id,
       questions: this.state.form
     };
 
-    pollService.create(newPoll).then(
-      (res) => history.replace(`/question/${res.data}`),
-      error => console.log('error', error)
-    );
+    const formValidation = this.validate(newPoll.questions);
+
+    if (formValidation.message === 'Valid poll' && !formValidation.invalidFields) {
+      pollService.create(newPoll).then(
+        (res) => history.replace(`/question/${res.data}`),
+        error => console.log('error', error)
+      );
+    }
   }
 
   render() {
@@ -62,7 +101,7 @@ class NewComponent extends React.Component {
 
     return(
       <div>
-        <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+        <form autoComplete="off" onSubmit={this.handleSubmit}>
           {form.map((question, index) => (
             <Question key={index} index={index} question={question} form={form} />
           ))}

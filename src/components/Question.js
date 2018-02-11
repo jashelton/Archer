@@ -84,6 +84,7 @@ class Question extends React.Component {
             <Grid container spacing={24}>
               <Grid item xs={12}>
                 <TextField
+                  required = {index < 2 ? true : false}
                   id="question"
                   label="Question"
                   className={classes.textField}
@@ -94,6 +95,7 @@ class Question extends React.Component {
               {question.answers.map((answer, i) => (
                 <Grid key={i} item xs={12} sm={6}>
                   <TextField
+                    required = { i < 2 ? true : false}
                     id="name"
                     label="Answer Option"
                     className={classes.textField}
