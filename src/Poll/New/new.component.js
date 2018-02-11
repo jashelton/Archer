@@ -29,24 +29,32 @@ class NewComponent extends React.Component {
     };
 
     this.handleAddQuestion = this.handleAddQuestion.bind(this);
+    this.resetForm = this.resetForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
-    const initialForm = [];
-    for (let i = 0; i < 2; i++) {
-      initialForm.push(new NewQuestion());
-    }
-    this.setState({form: initialForm});
+    this.setState({form: this.initialForm()});
   }
 
   handleAddQuestion() {
     this.setState({form: this.state.form.concat(new NewQuestion())});
   }
 
-  validate(questions) {
-    let fields = [];
+  resetForm() {
+    this.setState({form: this.initialForm()});
+  }
 
+  initialForm() {
+    const initialForm = [];
+    for (let i = 0; i < 2; i++) {
+      initialForm.push(new NewQuestion());
+    }
+
+    return initialForm;
+  }
+
+  validate(questions) {
     if (questions[0].name === '' ||
         questions[1].name === '' ||
         questions[0].answers[0].name === '' ||
@@ -54,40 +62,47 @@ class NewComponent extends React.Component {
         questions[1].answers[0].name === '' ||
         questions[1].answers[1].name === '' ) {
           return { error: 'You must submit a valid poll' };
-        }
-      questions.forEach((q, i) => {
-      q.name === '' ? fields.push('invalid') : fields.push('valid')
-      q.answers.forEach((a, j) => {
-        if (a.name === '') {
-          fields[i] = 'invalid';
-        }
-      });
-    });
+    }
+    
+    const validQuestions = {
+      status: 'OK',
+      questions: questions.filter(q => q.valid && q.answers.length > 1)
+    }
 
-    const containsInvalid = fields.indexOf('invalid');
-
-    if (containsInvalid > -1) {
-      return {
-        message: 'Valid poll with invalid fields',
-        invalidFields: true
-      };
-    };
-
-    return {
-      message: 'Valid poll',
-      invalidFields: false
-    };
+    return validQuestions;
   }
 
   handleSubmit() {
+    const questions = this.state.form;
+    let questionsWithValues = [];
+
+    questions.forEach((q, i) => {
+      let newQuestion = {
+        name: '',
+        answers: [],
+        valid: false
+      }
+      if (q.name !== '') {
+        newQuestion.name = q.name;
+        newQuestion.valid = true;
+        q.answers.forEach((a, j) => {
+          if (a.name !== '') {
+            newQuestion.answers.push(a);
+          }
+        });
+      }
+
+      questionsWithValues.push(newQuestion);
+    });
+
+    const formValidation = this.validate(questionsWithValues);
+
     let newPoll = {
       author: this.state.auth.user.current_user.id,
-      questions: this.state.form
+      questions: formValidation.questions
     };
 
-    const formValidation = this.validate(newPoll.questions);
-
-    if (formValidation.message === 'Valid poll' && !formValidation.invalidFields) {
+    if (formValidation.status === 'OK') {
       pollService.create(newPoll).then(
         (res) => history.replace(`/question/${res.data}`),
         error => console.log('error', error)
@@ -107,6 +122,9 @@ class NewComponent extends React.Component {
           ))}
           <Button type="button" dense raised={true} color="primary" className={classes.flex} onClick={this.handleAddQuestion}>
             Add Question
+          </Button>
+          <Button dense raised={true} color="secondary" onClick={this.resetForm}>
+            Clear Form
           </Button>
           <Button dense raised={true} color="primary" onClick={this.handleSubmit}>
             Submit
