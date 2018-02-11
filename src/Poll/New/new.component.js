@@ -69,7 +69,7 @@ class NewComponent extends React.Component {
     if (containsInvalid > -1) {
       return {
         message: 'Valid poll with invalid fields',
-        invalidFields: fields
+        invalidFields: true
       };
     };
 
