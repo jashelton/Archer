@@ -5,7 +5,7 @@ import { history } from './helpers'
 // Routes
 import { PrivateRoute } from './components';
 import { HomePage } from './Home';
-import { LoginPage } from './Login';
+import LoginPage from './Login';
 import RegisterPage from './Register';
 import { ProfilePage } from './ProfilePage';
 import { BookmarkPage } from './BookmarkPage';

@@ -1,6 +1,30 @@
 import React from 'react';
-import { connect } from 'react-redux'; // LEARN: Look into connect
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { userActions } from '../actions';
+
+// Material
+import { withStyles } from 'material-ui/styles';
+import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+
+const styles = theme => ({
+  card: {
+    width: '50%',
+    margin: 'auto'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: '100%',
+  },
+  flex: {
+    flex: 1
+  },
+});
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -17,7 +41,7 @@ class LoginPage extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this); // LEARN: refresh on this
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
@@ -31,38 +55,63 @@ class LoginPage extends React.Component {
     this.setState({ submitted: true });
     // const { username, password, submitted } = this.state;
     const { username, password } = this.state;
-    const { dispatch } = this.props; // LEARN: not sure what this is
+    const { dispatch } = this.props;
     if (username && password) {
-      dispatch(userActions.login(username, password)) // LEARN: look into dispatch
+      dispatch(userActions.login(username, password))
     }
   }
 
   render() {
-     // const { loggingIn } = this.props; // LEARN: need to check props to see what logginIn is.  For spinner?
-    // const { username, password, submitted } = this.state; // LEARN: Why is this here and in the handle submit function?
-    const { username, password } = this.state; // LEARN: Why is this here and in the handle submit function?
+     // const { loggingIn } = this.props;
+    // const { username, password, submitted } = this.state;
+    const { username, password } = this.state;
+    const { classes } = this.props;
+
     return (
       <div className="login-view container">
-        <h2>Login</h2>
-        <form name="form" onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="username">Username</label>
-            <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
-          </div>
-          <div>
-            <button className="btn">Login</button>
-          </div>
-        </form>
+        <Card className={classes.card}>
+          <CardHeader
+            title="Login"
+          />
+          <form onSubmit={this.handleSubmit}>
+            <CardContent>
+              <TextField
+                id="username"
+                label="Username"
+                name="username"
+                className={classes.textField}
+                value={this.state.username}
+                onChange={this.handleChange}
+                margin="normal"
+              />
+              <TextField
+                id="password"
+                label="Password"
+                name="password"
+                type="password"
+                className={classes.textField}
+                value={this.state.password}
+                onChange={this.handleChange}
+                margin="normal"
+              />
+              <div className={classes.textField}>Not a user? <Link to={'/register'}>Register</Link></div>
+            </CardContent>
+            <CardActions>
+              <Button dense raised={true} color="primary" className={classes.flex} onClick={this.handleSubmit}>
+                Login
+              </Button>
+            </CardActions>
+          </form>
+          </Card>
       </div>
     );
   }
 }
 
-// LEARN: need to dig into this function -> should help once digging into state
+LoginPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
   return {
@@ -70,5 +119,4 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedLoginPage = connect(mapStateToProps)(LoginPage); // LEARN: unclear
-export { connectedLoginPage as LoginPage }; // LEARN: why?
+export default compose(withStyles(styles), connect(mapStateToProps))(LoginPage);
