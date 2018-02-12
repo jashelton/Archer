@@ -19,6 +19,7 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import Button from 'material-ui/Button';
 
 import RouterTest from '../router.js';
 import { NavItems, SecondaryNavItems } from './NavData.js';
@@ -103,6 +104,10 @@ const styles = theme => ({
       height: 'calc(100% - 64px)',
       marginTop: 64,
     },
+  },
+  button: {
+    color: '#fff',
+    margin: '0 8px'
   },
 });
 
@@ -189,12 +194,14 @@ class AppLayout extends React.Component {
               )}
               {
                 !authentication.loggedIn && (
-                  <Router history={history}>
-                    <div>
-                      <Link to={'/login'}>Login</Link>
-                      <Link to={'/register'}>Register</Link>
-                    </div>
-                  </Router>
+                  <div>
+                    <Button color="default" href="/login" className={classes.button}>
+                      Login
+                    </Button>
+                    <Button href="/register" className={classes.button}>
+                      Register
+                    </Button>
+                  </div>
                 )
               }
             </Toolbar>
