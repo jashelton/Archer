@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 
 import { pollService } from '../services';
 
+// Material
 import { withStyles } from 'material-ui/styles';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Card, { CardActions, CardHeader } from 'material-ui/Card';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
 import Icon from 'material-ui/Icon';
 
 const styles = {
@@ -64,22 +64,16 @@ class Poll extends React.Component {
 
     return(
       <Card className={classes.card}>
-        <CardContent>
-          <Typography type="headline" component="h2">
-            {question.question}
-          </Typography>
-          <Typography component="p">
-            Created by: 
-            <Link to={`/profile/${question.created_by}`}> {question.created_by} </Link>
-            on {question.created_at}
-          </Typography>
-          <Typography component="p">
-            <span>{question.responses} response{question.responses !== 1 ? 's' : ''}</span>
-            <span>X total questions</span>
-            <span>upvotes/downvotes</span>
-            <span>Tag</span>
-          </Typography>
-        </CardContent>
+        <CardHeader
+          title={question.question}
+          subheader={
+            <div>
+              <span>Created by: <Link to={`/profile/${question.created_by}`}>{question.created_by}</Link></span>
+              <span> - {question.responses} response{question.responses !== 1 ? 's' : ''}</span>
+              <span> - {question.question_count} questions</span>
+            </div>
+          }
+        />
         <CardActions>
           {/* <Button dense color="primary">
             Share
