@@ -1,7 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux'; // LEARN: Look into connect
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { userActions } from '../actions';
 import { userService } from '../services';
+
+// Material
+import { withStyles } from 'material-ui/styles';
+import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+
+const styles = theme => ({
+  card: {
+    width: '50%',
+    margin: 'auto'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: '100%',
+  },
+  flex: {
+    flex: 1
+  },
+});
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -47,34 +72,72 @@ class RegisterPage extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     return(
       <div>
-        <h1>Register Page</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
-          </label>
-          <label>
-            Username:
-            <input type="text" name="username" value={this.state.username} onChange={this.handleChange} />
-          </label>
-          <label>
-            Password:
-            <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
-          </label>
-          <label>
-            Confirm Password:
-            <input type="password" name="confirm_password" value={this.state.confirm_password} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
+        <Card className={classes.card}>
+          <CardHeader
+            title="Register"
+          />
+          <form onSubmit={this.handleSubmit}>
+            <CardContent>
+              <TextField
+                id="name"
+                label="Name"
+                name="name"
+                className={classes.textField}
+                value={this.state.name}
+                onChange={this.handleChange}
+                margin="normal"
+              />
+              <TextField
+                id="username"
+                label="Username"
+                name="username"
+                className={classes.textField}
+                value={this.state.username}
+                onChange={this.handleChange}
+                margin="normal"
+              />
+              <TextField
+                id="password"
+                label="Password"
+                name="password"
+                type="password"
+                className={classes.textField}
+                value={this.state.password}
+                onChange={this.handleChange}
+                margin="normal"
+              />
+              <TextField
+                id="confirm_password"
+                label="Confirm Password"
+                name="confirm_password"
+                type="password"
+                className={classes.textField}
+                value={this.state.confirm_password}
+                onChange={this.handleChange}
+                margin="normal"
+              />
+              <div className={classes.textField}>Already a user? <Link to={'/login'}>Login</Link></div>
+            </CardContent>
+            <CardActions>
+              <Button dense raised={true} color="primary" className={classes.flex} onClick={this.handleSubmit}>
+                Register
+              </Button>
+            </CardActions>
+          </form>
+        </Card>
       </div>
     )
   }
 }
 
-// LEARN: need to dig into this function -> should help once digging into state
+RegisterPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
   return {
@@ -82,5 +145,4 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedRegisterPage = connect(mapStateToProps)(RegisterPage); // LEARN: unclear
-export { connectedRegisterPage as RegisterPage }; // LEARN: why?
+export default compose(withStyles(styles), connect(mapStateToProps))(RegisterPage);

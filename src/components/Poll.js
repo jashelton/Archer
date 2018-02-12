@@ -15,7 +15,7 @@ import Icon from 'material-ui/Icon';
 const styles = {
   card: {
     width: '100%',
-    marginBottom: '24px'
+    marginBottom: '5px'
   },
 };
 
