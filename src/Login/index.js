@@ -64,7 +64,6 @@ class LoginPage extends React.Component {
   render() {
      // const { loggingIn } = this.props;
     // const { username, password, submitted } = this.state;
-    const { username, password } = this.state;
     const { classes } = this.props;
 
     return (
@@ -97,7 +96,7 @@ class LoginPage extends React.Component {
               <div className={classes.textField}>Not a user? <Link to={'/register'}>Register</Link></div>
             </CardContent>
             <CardActions>
-              <Button dense raised={true} color="primary" className={classes.flex} onClick={this.handleSubmit}>
+              <Button type="submit" dense raised={true} color="primary" className={classes.flex} onClick={this.handleSubmit}>
                 Login
               </Button>
             </CardActions>

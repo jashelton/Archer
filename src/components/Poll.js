@@ -60,7 +60,7 @@ class Poll extends React.Component {
   }
 
   render() {
-    const { classes, question } = this.props;
+    const { classes, question, authentication } = this.props;
 
     return(
       <Card className={classes.card}>
@@ -81,13 +81,16 @@ class Poll extends React.Component {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button dense color="primary">
+          {/* <Button dense color="primary">
             Share
-          </Button>
-          <Button dense color="primary" onClick={this.toggleFavorite}>
-            <Icon className={classes.leftIcon}>{question.favorite ? 'check': 'add'}</Icon>
-            My List
-          </Button>
+          </Button> */}
+          {
+            authentication.loggedIn &&
+            <Button dense color="primary" onClick={this.toggleFavorite}>
+              <Icon className={classes.leftIcon}>{question.favorite ? 'check': 'add'}</Icon>
+              My List
+            </Button>
+          }
           <Button component={Link} to={`/question/${question.id}`}>
             View
           </Button>
