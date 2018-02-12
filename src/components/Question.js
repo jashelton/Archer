@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+// Material
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Grid from 'material-ui/Grid';
+import IconButton from 'material-ui/IconButton';
 
 const styles = theme => ({
   root: {
@@ -48,6 +51,8 @@ class Question extends React.Component {
     }
 
     this.handleAddAnswer = this.handleAddAnswer.bind(this);
+    this.handleDeleteQuestion = this.handleDeleteQuestion.bind(this);
+    this.handleDeleteAnswer = this.handleDeleteAnswer.bind(this);
   }
 
   handleAddAnswer() {
@@ -71,6 +76,16 @@ class Question extends React.Component {
     this.setState({ question });
   }
 
+  handleDeleteQuestion() {
+    this.props.deleteQuestion(this.props.index);
+  }
+
+  handleDeleteAnswer = answerIndex => event => {
+    const currentQuestion = this.state.question;
+    currentQuestion.answers.splice(answerIndex, 1);
+    this.setState({question: currentQuestion});
+  }
+
   render() {
     const { classes, index, question } = this.props;
 
@@ -79,7 +94,13 @@ class Question extends React.Component {
         <Card className={classes.card}>
           <CardHeader
             title={index === 0 ? 'Primary Question' : 'Secondary Question'}
-            subheader='subheader'/>
+            subheader='subheader'
+            action={index > 1 &&
+              <IconButton onClick={this.handleDeleteQuestion}>
+                delete
+              </IconButton>
+            }
+          />
           <CardContent>
             <Grid container spacing={24}>
               <Grid item xs={12}>
@@ -102,7 +123,13 @@ class Question extends React.Component {
                     value={answer.name}
                     onChange={this.handleAnswerChange(i)}
                     margin="normal"/>
+                  { i > 1 &&
+                    <Button dense raised={true} color="primary" onClick={this.handleDeleteAnswer(i)}>
+                      Delete Answer
+                    </Button>
+                  }
                 </Grid>
+
               ))}
             </Grid>
           </CardContent>

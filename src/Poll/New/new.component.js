@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux'; // LEARN: Look into connect
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
@@ -29,6 +29,7 @@ class NewComponent extends React.Component {
     };
 
     this.handleAddQuestion = this.handleAddQuestion.bind(this);
+    this.handleDeleteQuestion = this.handleDeleteQuestion.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -37,14 +38,24 @@ class NewComponent extends React.Component {
     this.setState({form: this.initialForm()});
   }
 
+  // Add question to state;
   handleAddQuestion() {
     this.setState({form: this.state.form.concat(new NewQuestion())});
   }
 
+  // Delete question with given index.
+  handleDeleteQuestion(index) {
+    const currentPoll = this.state.form;
+    currentPoll.splice(index, 1);
+    this.setState({form: currentPoll});
+  }
+
+  // Reset form to initialForm() state.
   resetForm() {
     this.setState({form: this.initialForm()});
   }
 
+  // Set initial form state with two questions each containing two answer fields.
   initialForm() {
     const initialForm = [];
     for (let i = 0; i < 2; i++) {
@@ -54,6 +65,7 @@ class NewComponent extends React.Component {
     return initialForm;
   }
 
+  // Return validated form with empty values stripped.
   validate(questions) {
     if (questions[0].name === '' ||
         questions[1].name === '' ||
@@ -118,7 +130,13 @@ class NewComponent extends React.Component {
       <div>
         <form autoComplete="off" onSubmit={this.handleSubmit}>
           {form.map((question, index) => (
-            <Question key={index} index={index} question={question} form={form} />
+            <Question
+              key={index}
+              index={index}
+              question={question}
+              deleteQuestion={this.handleDeleteQuestion}
+              form={form}
+            />
           ))}
           <Button type="button" dense raised={true} color="primary" className={classes.flex} onClick={this.handleAddQuestion}>
             Add Question
