@@ -7,7 +7,7 @@ import { PrivateRoute } from './components';
 import { HomePage } from './Home';
 import LoginPage from './Login';
 import RegisterPage from './Register';
-import { ProfilePage } from './ProfilePage';
+import ProfilePage from './ProfilePage';
 import BookmarkPage from './BookmarkPage';
 // TODO: Would like to import NewComponent, VoteComponent, and ViewComponent from ./Poll
 import VoteComponent from './Poll/Vote/vote.component';
