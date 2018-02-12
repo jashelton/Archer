@@ -33,10 +33,16 @@ class RegisterPage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    for (const key in this.state) {
+      if (this.state[key] === '') {
+        throw new Error('Invalid Form');
+      }
+    }
+
     if (this.state.password === this.state.confirm_password) {
       userService.register(this.state);
     } else {
-      console.log('Passwords do not match, try again.')
+      throw new Error('Passwords do not match');
     }
   }
 
