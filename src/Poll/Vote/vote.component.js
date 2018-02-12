@@ -4,8 +4,6 @@ import { questionActions } from '../../actions';
 import { pollService } from '../../services';
 import { history } from '../../helpers/index';
 
-// TODO: This is a POLL rather than QUESTIONDETAIL
-
 class VoteComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -17,6 +15,7 @@ class VoteComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     const question_id = this.props.match.params.id;
+    // TODO: This is currently stored in the store as 'question' but should be a 'poll'.
     this.props.dispatch(questionActions.getById(question_id, this.props.authentication.user.current_user.id));
   }
 
