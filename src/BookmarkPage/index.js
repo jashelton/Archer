@@ -10,7 +10,8 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import IconButton from 'material-ui/IconButton';
 import Typography from 'material-ui/Typography';
-import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 
 const styles = theme => ({
   demo: {
@@ -69,9 +70,19 @@ class BookmarkPage extends React.Component {
                 <List dense={true}>
                   {questions.map((q, i) => (
                     <ListItem key={q.poll_id}>
+                      <ListItemAvatar>
+                        <Avatar>
+                          {q.response_count || '0'}
+                        </Avatar>
+                      </ListItemAvatar>
                       <ListItemText
                         primary={<Link to={`/question/${q.poll_id}`}>{q.question}</Link>}
-                        secondary="Other info related to this poll."
+                        secondary={
+                          <span>
+                            Created by: <Link to={`/profile/${q.username}`}>{q.username} </Link>
+                            on {q.created_at} - {q.question_count} questions
+                          </span>
+                        }
                       />
                       <ListItemSecondaryAction>
                         <IconButton aria-label="Delete" className={classes.warn} onClick={this.deleteFavorite(i)}>
