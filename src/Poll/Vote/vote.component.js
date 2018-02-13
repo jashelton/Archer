@@ -10,13 +10,10 @@ import { history } from '../../helpers/index';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardHeader, CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
+import Radio, { RadioGroup } from 'material-ui/Radio';
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    marginTop: 30,
-  },
   card: {
     width: '100%',
     marginBottom: '24px'
@@ -24,23 +21,12 @@ const styles = theme => ({
   flex: {
     flex: 1,
   },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+  formControl: {
+    margin: theme.spacing.unit * 3,
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    flex: 1,
-    width: '100%'
+  group: {
+    margin: `${theme.spacing.unit}px 0`,
   },
-  menu: {
-    width: 200,
-  },
-  wrapper: {
-    display: 'flex',
-    flex: 1
-  }
 });
 
 class VoteComponent extends React.Component {
@@ -48,36 +34,54 @@ class VoteComponent extends React.Component {
     super(props);
 
     this.state = {
+      currentQuestion: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.goBack = this.goBack.bind(this);
+    this.goNext = this.goNext.bind(this);
 
     const question_id = this.props.match.params.id;
     // TODO: This is currently stored in the store as 'question' but should be a 'poll'.
     this.props.dispatch(questionActions.getById(question_id, this.props.authentication.user.current_user.id));
   }
 
-  handleChange(event) {
-    const value = event.target.value;
+  handleChange(event, value) {
     const name = event.target.name;
     let obj = {};
 
     obj[name] = value;
     this.setState(obj);
+
+    if (this.state.currentQuestion < this.props.question.items.questions.length - 1) {
+      this.goNext()
+    }
   }
 
   handleSubmit(event) {
     event.preventDefault();
+    const form = this.state;
+    delete form.currentQuestion;
+
     const data = {
       username: this.props.authentication.user.current_user.id,
       poll_id: this.props.question.items.poll_id,
-      form: this.state,
+      form
     }
+
     pollService.submit(data).then(
       () => history.replace(`/results/${data.poll_id}`),
       error => console.log('error', error)
     );
+  }
+
+  goBack() {
+    this.setState({currentQuestion: this.state.currentQuestion - 1});
+  }
+
+  goNext() {
+    this.setState({currentQuestion: this.state.currentQuestion + 1})
   }
 
   render() {
@@ -88,33 +92,59 @@ class VoteComponent extends React.Component {
       <div>
         {/* TODO: Refactor Lana to return all questions ordered by type rather than separating primary and secondary questions */}
         {question.items && !question.items.has_taken &&
-          <Card className={classes.card}>
-            <form onSubmit={this.handleSubmit}>
-              <div>
-                <h1>{question.items.primary_question.question}</h1>
-                {question.items.primary_question.answers.map(a => (
-                  <div key={a.id}>
-                    <label>{a.answer}</label>
-                    <input type="radio" value={a.value} name={question.items.primary_question.question_id} onChange={this.handleChange}/>
-                  </div>
-                ))}
+          <form onSubmit={this.handleSubmit}>
+            {question.items.questions.map((q, i) => (
+              <div key={q.question_id}>
+                {i === this.state.currentQuestion &&
+                  <Card className={classes.card}>
+                    <CardHeader
+                      title={<span>{i + 1} / {question.items.questions.length}</span>}
+                    />
+                    <CardContent>
+                      <FormControl component="fieldset" required className={classes.formControl}>
+                        <FormLabel component="legend">{q.question}</FormLabel>
+                        <RadioGroup
+                          aria-label="gender"
+                          name={q.question_id.toString()}
+                          className={classes.group}
+                          value={this.state[q.question_id]}
+                          onChange={this.handleChange}
+                        >
+                          {q.answers.map((a, j) => (
+                            <FormControlLabel
+                              key={a.id}
+                              value={a.value}
+                              control={<Radio />}
+                              label={a.answer}
+                            />
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    </CardContent>
+                    <CardActions>
+                      { this.state.currentQuestion > 0 &&
+                        <Button dense raised={true} color="primary" onClick={this.goBack}>
+                          Back
+                        </Button>
+                      }
+                      <span className={classes.flex}></span>
+                      { this.state.currentQuestion < question.items.questions.length - 1 &&
+                        <Button dense raised={true} color="primary" onClick={this.goNext} disabled={!this.state[q.question_id]}>
+                          Next
+                        </Button>
+                      }
+                      {
+                        this.state.currentQuestion + 1 === question.items.questions.length &&
+                        <Button dense raised={true} color="primary" onClick={this.handleSubmit}>
+                          Submit
+                        </Button>
+                      }
+                    </CardActions>
+                  </Card>
+                } 
               </div>
-              <div>
-                {question.items.secondary_questions.map(sq => (
-                  <div key={sq.question_id}>
-                    <h2>{sq.question}</h2>
-                    {sq.answers.map(a => (
-                      <div key={a.id}>
-                        <label>{a.answer}</label>
-                        <input type="radio" value={a.value} name={sq.question_id} onChange={this.handleChange}/>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-              <input type="submit" value="Submit" />
-            </form>
-          </Card>
+            ))}
+          </form>
         }
       </div>
     )
@@ -127,6 +157,7 @@ VoteComponent.propTypes = {
 
 function mapStateToProps(state) {
   const { question, authentication } = state;
+
   return {
     question, authentication
   };
