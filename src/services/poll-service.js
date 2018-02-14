@@ -1,3 +1,5 @@
+import { SecureHeaders } from '../helpers';
+
 export const pollService = {
   submit,
   create,
@@ -6,11 +8,7 @@ export const pollService = {
 };
 
 function submit(data) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({data})
-  };
+  const requestOptions = SecureHeaders.requestOptions('POST', {data});
 
   return fetch('http://localhost:8080/response', requestOptions)
     .then(response => {
@@ -18,16 +16,12 @@ function submit(data) {
         return Promise.reject(response.statusText);
       }
 
-      return response.json()
+      return response.json();
     });
 }
 
 function create(poll) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({poll})
-  };
+  const requestOptions = SecureHeaders.requestOptions('POST', {poll});
 
   return fetch('http://localhost:8080/create', requestOptions)
     .then(response => {
@@ -46,11 +40,7 @@ function addFavorite(user_id, poll) {
     poll,
   }
 
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }
+  const requestOptions = SecureHeaders.requestOptions('POST', data);
 
   return fetch('http://localhost:8080/favorites', requestOptions)
     .then(response => {
@@ -68,11 +58,7 @@ function deleteFavorite(user_id, poll_id) {
     poll_id
   };
 
-  const requestOptions = {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  };
+  const requestOptions = SecureHeaders.requestOptions('DELETE', data);
 
   return fetch('http://localhost:8080/favorites', requestOptions)
     .then(response => {

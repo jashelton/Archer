@@ -1,12 +1,11 @@
+import { SecureHeaders } from '../helpers';
+
 export const bookmarkService = {
   list
 };
 
 function list(user_id) {
-  const requestOptions = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  };
+  const requestOptions = SecureHeaders.requestOptions('GET');
 
   return fetch(`http://localhost:8080/bookmarks/${user_id}`, requestOptions)
     .then(response => {

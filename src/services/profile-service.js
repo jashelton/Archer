@@ -1,12 +1,11 @@
+import { SecureHeaders } from '../helpers';
+
 export const profileService = {
   created
 };
 
 function created(user) {
-  const requestOptions = {
-    method: 'GET'
-    // Should this be protected?
-  };
+  const requestOptions = SecureHeaders.requestOptions('GET');
 
   return fetch(`http://localhost:8080/polls/${user}`, requestOptions).then(handleResponse);
 }

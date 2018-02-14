@@ -1,23 +1,19 @@
+import { SecureHeaders } from '../helpers';
+
 export const questionService = {
   getAll,
   getById
 };
 
+// Get list of polls
 function getAll() {
-  const requestOptions = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  };
-
+  const requestOptions = SecureHeaders.requestOptions('GET');
   return fetch('http://localhost:8080/questions', requestOptions).then(handleResponse);
 }
 
+// Take Poll
 function getById(id, user_id) {
-  const requestOptions = {
-    method: 'GET'
-    // Should this be protected?
-  };
-
+  const requestOptions = SecureHeaders.requestOptions('GET');
   return fetch(`http://localhost:8080/questions/${id}?user_id=${user_id}`, requestOptions).then(handleResponse);
 }
 
