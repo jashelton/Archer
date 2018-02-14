@@ -1,5 +1,6 @@
 export class SecureHeaders {
   static requestOptions(method, body) {
+    // TODO: Need error handling if token isn't present.
     const options = {
       method,
       headers: {
@@ -8,10 +9,8 @@ export class SecureHeaders {
       }
     }
 
-    if (body) {
-      options.body = JSON.stringify(body);
-    }
-    console.log(options);
+    if (body) options.body = JSON.stringify(body);
+
     return options;
   }
 
