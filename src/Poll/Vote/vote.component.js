@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { questionActions } from '../../actions';
+import { questionActions, snackbarActions } from '../../actions';
 import { pollService } from '../../services';
 import { history } from '../../helpers/index';
 
@@ -71,8 +71,14 @@ class VoteComponent extends React.Component {
     }
 
     pollService.submit(data).then(
-      () => history.replace(`/results/${data.poll_id}`),
-      error => console.log('error', error)
+      () => {
+        history.replace(`/results/${data.poll_id}`);
+        this.props.dispatch(snackbarActions.open('You have successfully voted on the poll.'));
+      },
+      err => {
+        this.props.dispatch(snackbarActions.open(`Error: ${err}`))
+        console.log('error', err);
+      }
     );
   }
 

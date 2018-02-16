@@ -251,7 +251,6 @@ AppLayout.propTypes = {
 
 function mapStateToProps(state) {
   const { authentication, snackbar } = state;
-  console.log(snackbar);
   return {
       authentication,
       snackbar

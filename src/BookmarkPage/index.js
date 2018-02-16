@@ -52,7 +52,7 @@ class BookmarkPage extends React.Component {
         },
         err => {
           console.log('error', err);
-          this.props.dispatch(snackbarActions.open('error', err));
+          this.props.dispatch(snackbarActions.open(`Error: ${err}`));
         }
       );
   }

@@ -11,6 +11,7 @@ import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardHeader } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
+import { snackbarActions } from '../actions';
 
 const styles = {
   card: {
@@ -43,8 +44,12 @@ class Poll extends React.Component {
           let question = this.state.question;
           question.favorite = 1;
           this.setState({question});
+          this.props.dispatch(snackbarActions.open('You have successfully added a poll to your list.'))
         },
-        err => console.log('error', err)
+        err => {
+          this.props.dispatch(snackbarActions.open(`Error: ${err}`))
+          console.log('error', err);
+        }
       );
   }
 
@@ -55,6 +60,11 @@ class Poll extends React.Component {
           let question = this.state.question;
           question.favorite = 0;
           this.setState({question});
+          this.props.dispatch(snackbarActions.open('You have successfully removed a poll from your list.'));
+        },
+        err => {
+          this.props.dispatch(snackbarActions.open(`Error: ${err}`));
+          console.log('Error', err);
         }
       )
   }

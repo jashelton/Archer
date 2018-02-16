@@ -8,6 +8,7 @@ import Question from '../../components/Question.js';
 import { NewQuestion } from '../../models/question.model.js';
 import { pollService } from '../../services';
 import { history } from '../../helpers/index';
+import { snackbarActions } from '../../actions';
 
 const styles = theme => ({
   flex: {
@@ -116,8 +117,14 @@ class NewComponent extends React.Component {
 
     if (formValidation.status === 'OK') {
       pollService.create(newPoll).then(
-        (res) => history.replace(`/question/${res.data}`),
-        error => console.log('error', error)
+        (res) => {
+          history.replace(`/question/${res.data}`);
+          this.props.dispatch(snackbarActions.open('You have successfully created a poll.'))
+        },
+        err => {
+          this.props.dispatch(snackbarActions.open(`Error: ${err}`));
+          console.log(`Error: ${err}`)
+        }
       );
     }
   }
