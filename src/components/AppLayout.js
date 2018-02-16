@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import { history } from '../helpers'
 import { Router } from 'react-router';
 
+import SnackbarComponent from '../components/Snackbar';
+import { snackbarActions } from '../actions';
+
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
@@ -21,7 +24,7 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import Button from 'material-ui/Button';
 
-import RouterTest from '../router.js';
+import RouterTest from '../router.js'; // TODO: Naming
 import { NavItems, SecondaryNavItems } from './NavData.js';
 
 const drawerWidth = 240;
@@ -119,6 +122,8 @@ class AppLayout extends React.Component {
       open: false,
       anchorEl: null,
     };
+
+    this.closeSnackbar = this.closeSnackbar.bind(this);
   }
 
   handleDrawerOpen = () => {
@@ -137,8 +142,12 @@ class AppLayout extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  closeSnackbar() {
+    this.props.dispatch(snackbarActions.close());
+  }
+
   render() {
-    const { classes, theme, authentication } = this.props;
+    const { classes, theme, authentication, snackbar } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -223,14 +232,13 @@ class AppLayout extends React.Component {
               <List className={classes.list}>{NavItems}</List>
               <Divider />
               <List className={classes.list}>{SecondaryNavItems}</List>
-              {/* <List className={classes.list}>{otherMailFolderListItems}</List> */}
             </div>
           </Drawer>
           <main className={classes.content}>
-            {/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography> */}
             <RouterTest />
           </main>
         </div>
+        <SnackbarComponent message={snackbar.message} open={snackbar.open} close={this.closeSnackbar}/>
       </div>
     );
   }
@@ -242,9 +250,11 @@ AppLayout.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { authentication } = state;
+  const { authentication, snackbar } = state;
+  console.log(snackbar);
   return {
-      authentication
+      authentication,
+      snackbar
   };
 }
 

@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { bookmarkService, pollService } from '../services';
+import { snackbarActions } from '../actions';
 
 // Material
 import { withStyles } from 'material-ui/styles';
@@ -31,7 +32,7 @@ class BookmarkPage extends React.Component {
 
     this.state = {
       questions: null
-    }
+    };
 
     bookmarkService.list(this.props.authentication.user.current_user.id)
       .then(
@@ -47,8 +48,13 @@ class BookmarkPage extends React.Component {
           let questions = this.state.questions;
           questions.splice(questionIndex, 1);
           this.setState({questions});
+          this.props.dispatch(snackbarActions.open('You have successfully removed a poll from your list.'));
+        },
+        err => {
+          console.log('error', err);
+          this.props.dispatch(snackbarActions.open('error', err));
         }
-      )
+      );
   }
 
   render() {
