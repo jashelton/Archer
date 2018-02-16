@@ -12,12 +12,9 @@ function getById(id, user_id) {
 
 function updateFilters(data) {
   const requestOptions = SecureHeaders.requestOptions('GET');
-
-  const esc = encodeURIComponent;
-  const query = Object.keys(data)
-    .map(k => esc(k) + '=' + esc(data[k]))
-    .join('&');
-    
+  const esc = encodeURIComponent;  
+  const query = Object.keys(data).map(k => `${esc(k)}=${esc(data[k])}`).join('&');
+  
   console.log(query);
 
   return fetch(`http://localhost:8080/test?${query}`, requestOptions).then(handleResponse);

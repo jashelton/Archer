@@ -119,7 +119,7 @@ class VoteComponent extends React.Component {
                           {q.answers.map((a, j) => (
                             <FormControlLabel
                               key={a.id}
-                              value={a.value}
+                              value={a.answer}
                               control={<Radio />}
                               label={a.answer}
                             />
