@@ -15,8 +15,12 @@ class PlotlyPieChart extends React.Component {
   }
 
   handleClick(e) {
-    this.props.dispatch(filterActions.addFilter(e.points[0].label));
-    this.props.updateQuestion();
+    const filterExists = this.props.filters.indexOf(e.points[0].label);
+
+    if (filterExists === -1) {
+      this.props.dispatch(filterActions.addFilter(e.points[0].label));
+      this.props.updateQuestion();
+    }
   }
 
   render() {
