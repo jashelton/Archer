@@ -5,7 +5,7 @@ import Poll from '../components/Poll.js';
 
 export default class HomePage extends React.Component {
   componentDidMount() {
-    this.props.dispatch(questionActions.getAll());
+    this.props.dispatch(questionActions.getAll(this.props.authentication.user.current_user.id));
   }
 
   render() {
@@ -27,9 +27,9 @@ export default class HomePage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { questions } = state;
+  const { questions, authentication } = state;
   return {
-    questions
+    questions, authentication
   };
 }
 

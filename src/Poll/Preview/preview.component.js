@@ -9,7 +9,7 @@ export class PreviewComponent extends React.Component {
 
   render() {
     return(
-      <div>Preview Component</div>
+      <div>Available in Beta</div>
     )
   }
 }

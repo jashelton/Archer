@@ -6,9 +6,9 @@ export const questionService = {
 };
 
 // Get list of polls
-function getAll() {
+function getAll(user_id) {
   const requestOptions = SecureHeaders.requestOptions('GET');
-  return fetch('http://localhost:8080/questions', requestOptions).then(handleResponse);
+  return fetch(`http://localhost:8080/questions?user_id=${user_id}`, requestOptions).then(handleResponse);
 }
 
 // Take Poll

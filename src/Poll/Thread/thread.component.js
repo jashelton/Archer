@@ -9,7 +9,7 @@ export class ThreadComponent extends React.Component {
 
   render() {
     return(
-      <div>Thread Component</div>
+      <div>Available in Beta</div>
     )
   }
 }

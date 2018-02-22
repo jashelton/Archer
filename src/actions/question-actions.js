@@ -7,11 +7,11 @@ export const questionActions = {
   getById
 };
 
-function getAll() {
+function getAll(user_id) {
   return dispatch => {
     dispatch(request());
 
-    questionService.getAll()
+    questionService.getAll(user_id)
       .then(
         questions => dispatch(success(questions.data)),
         error => dispatch(failure(error))

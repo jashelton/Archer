@@ -27,6 +27,8 @@ import Button from 'material-ui/Button';
 import RouterTest from '../router.js'; // TODO: Naming
 import { NavItems, SecondaryNavItems } from './NavData.js';
 
+import { Ad } from '../components';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -238,6 +240,7 @@ class AppLayout extends React.Component {
             <RouterTest />
           </main>
         </div>
+        <Ad />
         <SnackbarComponent message={snackbar.message} open={snackbar.open} close={this.closeSnackbar}/>
       </div>
     );

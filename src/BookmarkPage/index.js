@@ -59,6 +59,7 @@ class BookmarkPage extends React.Component {
 
   render() {
     const { questions } = this.state;
+    console.log(questions);
     const { classes } = this.props;
 
     return(
@@ -69,35 +70,40 @@ class BookmarkPage extends React.Component {
               Bookmarked Polls:
             </Typography>
             <div className={classes.demo}>
-              { !questions &&
-                <span>You have no bookmarked polls.</span>
-              }
-              {questions &&
-                <List dense={true}>
-                  {questions.map((q, i) => (
-                    <ListItem key={q.poll_id}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          {q.response_count || '0'}
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={<Link to={`/question/${q.poll_id}`}>{q.question}</Link>}
-                        secondary={
-                          <span>
-                            Created by: <Link to={`/profile/${q.username}`}>{q.username} </Link>
-                            on {q.created_at} - {q.question_count} questions
-                          </span>
-                        }
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton aria-label="Delete" className={classes.warn} onClick={this.deleteFavorite(i)}>
-                          delete
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
+              {
+                questions &&
+                <div>
+                  { questions.length < 1 &&
+                    <span>You have no bookmarked polls.</span>
+                  }
+                  { questions.length > 0 &&
+                    <List dense={true}>
+                      {questions.map((q, i) => (
+                        <ListItem key={q.poll_id}>
+                          <ListItemAvatar>
+                            <Avatar>
+                              {q.response_count || '0'}
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={<Link to={`/question/${q.poll_id}`}>{q.question}</Link>}
+                            secondary={
+                              <span>
+                                Created by: <Link to={`/profile/${q.username}`}>{q.username} </Link>
+                                on {q.created_at} - {q.question_count} questions
+                              </span>
+                            }
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton aria-label="Delete" className={classes.warn} onClick={this.deleteFavorite(i)}>
+                              delete
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
+                    </List>
+                  }
+                </div>
               }
             </div>
           </Grid>
