@@ -7,7 +7,10 @@ export const questionService = {
 
 // Get list of polls
 function getAll(user_id) {
-  const requestOptions = SecureHeaders.requestOptions('GET');
+  // const requestOptions = SecureHeaders.requestOptions('GET');
+  const requestOptions = {
+    method: 'GET'
+  }
   return fetch(`http://localhost:8080/questions?user_id=${user_id}`, requestOptions).then(handleResponse);
 }
 

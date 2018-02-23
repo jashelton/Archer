@@ -5,7 +5,9 @@ import Poll from '../components/Poll.js';
 
 export default class HomePage extends React.Component {
   componentDidMount() {
-    this.props.dispatch(questionActions.getAll(this.props.authentication.user.current_user.id));
+    // TODO: IS IT OKAY TO RETURN -1 HERE?
+    const user_id = this.props.authentication.loggedIn ? this.props.authentication.user.current_user.id : -1;
+    this.props.dispatch(questionActions.getAll(user_id));
   }
 
   render() {

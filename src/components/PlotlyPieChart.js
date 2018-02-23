@@ -16,7 +16,7 @@ class PlotlyPieChart extends React.Component {
 
   handleClick(e) {
     const filterExists = this.props.filters.find(m => {
-      m.question_id === this.props.question.id && m.text === e.points[0].label;
+      return m.question_id === this.props.question.id && m.text === e.points[0].label;
     });
 
     if (!filterExists) {
