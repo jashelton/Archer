@@ -12,10 +12,10 @@ function getFilters() {
   function getFilters() { return { type: filterConstants.GET_FILTERS } }
 }
 
-function addFilter(filter) {
-  return dispatch => dispatch(addFilter(filter));
+function addFilter(filter, question_id) {
+  return dispatch => dispatch(addFilter(filter, question_id));
 
-  function addFilter(filter) { return { type: filterConstants.ADD_FILTER, filter } }
+  function addFilter(filter) { return { type: filterConstants.ADD_FILTER, filter, question_id } }
 }
 
 function deleteFilter(filter) {

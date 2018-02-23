@@ -46,7 +46,7 @@ class Filters extends React.Component {
                   return (
                     <Chip
                       key={index}
-                      label={data}
+                      label={data.text}
                       onDelete={() => this.handleDelete(data)}
                       className={classes.chip}
                     />

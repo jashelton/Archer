@@ -5,7 +5,7 @@ export function filters(filters = [], action) {
     case filterConstants.GET_FILTERS:
       return [...filters];
     case filterConstants.ADD_FILTER:
-      return [...filters, action.filter];
+      return [...filters, {text: action.filter, question_id: action.question_id}];
     case filterConstants.DELETE_FILTER:
       let currentFilters = [...filters];
       let filterToDelete = currentFilters.indexOf(action.filter);
