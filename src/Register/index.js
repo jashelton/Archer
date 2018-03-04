@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { userActions } from '../actions';
+import { userActions, snackbarActions } from '../actions';
 import { userService } from '../services';
 
 // Material
@@ -65,9 +65,13 @@ class RegisterPage extends React.Component {
     }
 
     if (this.state.password === this.state.confirm_password) {
-      userService.register(this.state);
+      userService.register(this.state).then(
+        res => this.props.dispatch(snackbarActions.open(`${res.data}`)), // TODO: Refactor res from lana 
+        err => this.props.dispatch(snackbarActions.open(`Error: ${err}`)) 
+      );
     } else {
-      throw new Error('Passwords do not match');
+      this.props.dispatch(snackbarActions.open(`Passwords do not match`))
+      return;
     }
   }
 

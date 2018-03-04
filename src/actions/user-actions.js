@@ -2,6 +2,7 @@ import { userConstants } from '../constants';
 import { userService } from '../services'; // not implemented;
 // import { alertActions } from './'; // implement later
 import { history } from '../helpers';
+import { snackbarActions } from '../actions';
 
 export const userActions = {
   login,
@@ -20,9 +21,11 @@ function login(username, password, from) {
         user => {
           dispatch(success(user));
           history.push(from);
+          dispatch(snackbarActions.open(`Successfully logged in as ${username}`));
         },
         error => {
           dispatch(failure(error));
+          dispatch(snackbarActions.open(`Error: ${error}`))
         }
       );
   };

@@ -59,7 +59,7 @@ class LoginPage extends React.Component {
     const pathFrom = this.props.history.location.state ? this.props.history.location.state.from.pathname : '/';
 
     if (username && password) {
-      dispatch(userActions.login(username, password, pathFrom))
+      dispatch(userActions.login(username, password, pathFrom));
     }
   }
 

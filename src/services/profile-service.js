@@ -7,7 +7,7 @@ export const profileService = {
 function created(user) {
   const requestOptions = SecureHeaders.requestOptions('GET');
 
-  return fetch(`http://localhost:8080/polls/${user}`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_BASEURL}/polls/${user}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

@@ -11,13 +11,13 @@ function getAll(user_id) {
   const requestOptions = {
     method: 'GET'
   }
-  return fetch(`http://localhost:8080/questions?user_id=${user_id}`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_BASEURL}/questions?user_id=${user_id}`, requestOptions).then(handleResponse);
 }
 
 // Take Poll
 function getById(id, user_id) {
   const requestOptions = SecureHeaders.requestOptions('GET');
-  return fetch(`http://localhost:8080/questions/${id}?user_id=${user_id}`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_BASEURL}/questions/${id}?user_id=${user_id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

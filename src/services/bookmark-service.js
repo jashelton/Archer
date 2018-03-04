@@ -7,7 +7,7 @@ export const bookmarkService = {
 function list(user_id) {
   const requestOptions = SecureHeaders.requestOptions('GET');
 
-  return fetch(`http://localhost:8080/bookmarks/${user_id}`, requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/bookmarks/${user_id}`, requestOptions)
     .then(response => {
       if(!response.ok) {
         return Promise.reject(response.statusText);

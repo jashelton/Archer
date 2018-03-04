@@ -1,4 +1,5 @@
 import { history } from '../helpers';
+import { snackbarActions } from '../actions';
 
 export const userService = {
   login,
@@ -17,9 +18,9 @@ function login(username, password) {
     body: JSON.stringify({ username, password })
   };
 
-  return fetch('http://localhost:8080/login', requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/login`, requestOptions)
     .then(response => {
-      if(!response.ok) { // LEARN: where is response.ok? -> returned from backend.  ok: boolean
+      if(!response.ok) {
         return Promise.reject(response.statusText);
       }
 
@@ -45,7 +46,7 @@ function register(form) {
     body: JSON.stringify({data: form})
   };
 
-  return fetch('http://localhost:8080/register', requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/register`, requestOptions)
     .then(response => {
       if(!response.ok) {
         return Promise.reject(response.statusText);

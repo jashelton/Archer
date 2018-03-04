@@ -10,7 +10,7 @@ export const pollService = {
 function submit(data) {
   const requestOptions = SecureHeaders.requestOptions('POST', {data});
 
-  return fetch('http://localhost:8080/response', requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/response`, requestOptions)
     .then(response => {
       if(!response.ok) {
         return Promise.reject(response.statusText);
@@ -23,7 +23,7 @@ function submit(data) {
 function create(poll) {
   const requestOptions = SecureHeaders.requestOptions('POST', {poll});
 
-  return fetch('http://localhost:8080/create', requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/create`, requestOptions)
     .then(response => {
       if(!response.ok) {
         return Promise.reject(response.statusText);
@@ -42,7 +42,7 @@ function addFavorite(user_id, poll) {
 
   const requestOptions = SecureHeaders.requestOptions('POST', data);
 
-  return fetch('http://localhost:8080/favorites', requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/favorites`, requestOptions)
     .then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -60,7 +60,7 @@ function deleteFavorite(user_id, poll_id) {
 
   const requestOptions = SecureHeaders.requestOptions('DELETE', data);
 
-  return fetch('http://localhost:8080/favorites', requestOptions)
+  return fetch(`${process.env.REACT_APP_BASEURL}/favorites`, requestOptions)
     .then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
