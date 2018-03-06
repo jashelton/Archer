@@ -1,5 +1,4 @@
 import { history } from '../helpers';
-import { snackbarActions } from '../actions';
 
 export const userService = {
   login,
