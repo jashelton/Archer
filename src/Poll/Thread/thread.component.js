@@ -43,11 +43,14 @@ class ThreadComponent extends React.Component {
   }
 
   handleChange = (panel, thread_id) => (event, expanded) => {
+    console.log(expanded);
     this.setState({
       expanded: expanded ? panel : false
     });
 
-    this.getComments(thread_id);
+    if (expanded) {
+      this.getComments(thread_id);
+    }
   };
 
   getComments(thread_id) {

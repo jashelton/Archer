@@ -164,7 +164,6 @@ NewComponent.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-// LEARN: need to dig into this function -> should help once digging into state
 function mapStateToProps(state) {
   const { authentication } = state;
 
@@ -173,5 +172,5 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedNewComponent = connect(mapStateToProps)(NewComponent); // LEARN: unclear
+const connectedNewComponent = connect(mapStateToProps)(NewComponent);
 export default withStyles(styles)(connectedNewComponent);

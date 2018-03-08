@@ -44,7 +44,7 @@ class Poll extends React.Component {
           let question = this.state.question;
           question.favorite = 1;
           this.setState({question});
-          this.props.dispatch(snackbarActions.open('You have successfully added a poll to your list.'))
+          this.props.dispatch(snackbarActions.open('You have successfully added a poll to your list.'));
         },
         err => {
           this.props.dispatch(snackbarActions.open(`Error: ${err}`))

@@ -59,7 +59,6 @@ class BookmarkPage extends React.Component {
 
   render() {
     const { questions } = this.state;
-    console.log(questions);
     const { classes } = this.props;
 
     return(

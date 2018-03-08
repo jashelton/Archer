@@ -15,7 +15,7 @@ const styles = theme => ({
 class SnackbarComponent extends React.Component {
   render() {
     const { classes, message, open, close } = this.props;
-
+    // TODO: Pass duration in as a prop.
     return (
       <div>
         <Snackbar
@@ -24,7 +24,7 @@ class SnackbarComponent extends React.Component {
             horizontal: 'center',
           }}
           open={open}
-          autoHideDuration={6000}
+          autoHideDuration={4000}
           onClose={close}
           SnackbarContentProps={{
             'aria-describedby': 'message-id',
