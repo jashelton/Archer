@@ -145,5 +145,4 @@ function mapStateToProps(state) {
   return { user_id: authentication.user.current_user.id };
 }
 
-// const connectedComments = connect(mapStateToProps)(Comments);
 export default compose(withStyles(styles), connect(mapStateToProps))(Comments);
