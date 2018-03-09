@@ -33,15 +33,24 @@ class Comments extends React.Component {
     super(props);
 
     this.state = {
-      comments: this.props.comments,
+      // comments: null,
       isReplying: null,
-      commentText: '',
-      auth: this.props.user_id,
+      commentText: ''
     }
 
     this.cancelComment = this.cancelComment.bind(this);
     this.submitComment = this.submitComment.bind(this);
   }
+
+  // componentDidMount() {
+  //   this.setState({comments: this.props.comments});
+  //   console.log(this.state.comments);
+  // }
+
+  // componentWillReceiveProps(newProps) {
+  //   console.log('HELLO');
+  //   this.setState({comments: newProps.comments});
+  // }
 
   reply = (comment_id) => (e) => {
     e.preventDefault();
@@ -57,18 +66,18 @@ class Comments extends React.Component {
   }
 
   submitComment = (thread_id) => () => {
-    // TODO: Add snackbar
     const commentData = {
       thread_id,
       parent_id: this.state.isReplying,
-      user_id: this.state.auth,
+      user_id: this.props.user_id,
       text: this.state.commentText
-    }
+    };
 
     commentsService.create(commentData)
       .then(
         res => {
-          const { comments, isReplying } = this.state;
+          const { isReplying } = this.state;
+          const { comments } = this.props;
           const parentComment = comments.findIndex(c => c.id === isReplying);
           comments[parentComment].comments = comments[parentComment].comments ? comments[parentComment].comments.push(res.data.comment[0]) : res.data.comment;
           this.setState({isReplying: null, commentText: '', comments});
@@ -79,7 +88,7 @@ class Comments extends React.Component {
   }
 
   render() {
-    const { comments, classes, user_id, dispatch } = this.props;
+    const { classes, user_id, dispatch, comments } = this.props;
     const { isReplying, commentText } = this.state;
 
     return(
@@ -93,15 +102,15 @@ class Comments extends React.Component {
                     <div>{c.text}</div>
                     <div>Created by: {c.username}</div>
                     <div>Created at: {c.created_at}</div>
-                    <a href="javascript:void(0)" onClick={this.reply(c.id)}>reply</a>
+                    <span onClick={this.reply(c.id)}>reply</span>
                     {isReplying === c.id &&
                       <Card>
                         <form autoComplete="off">
                           <CardContent>
                             <TextField
                               id="textarea"
-                              label="With placeholder multiline"
-                              placeholder="Placeholder"
+                              label="Comment"
+                              placeholder="Comment"
                               multiline
                               className={classes.textField}
                               margin="normal"
@@ -121,7 +130,7 @@ class Comments extends React.Component {
                       </Card>
                     }
                     {c.comments && c.comments.length && 
-                      <div><Comments dispatch={dispatch} classes={classes} comments={c.comments} user_id={this.props.user_id} /></div>
+                      <div><Comments dispatch={dispatch} classes={classes} comments={c.comments} user_id={user_id} /></div>
                     }
                   </div>
                 </CardContent>

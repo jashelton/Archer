@@ -57,7 +57,8 @@ class ThreadComponent extends React.Component {
       threads: null,
       expanded: null,
       creatingThread: false,
-      threadDescription: '',
+      creatingComment: false,
+      commentText: '',
       form: {
         threadTitle: '',
         threadDescription: ''
@@ -71,11 +72,12 @@ class ThreadComponent extends React.Component {
       );
 
     this.toggleCreatingThread = this.toggleCreatingThread.bind(this);
+    this.toggleCreatingComment = this.toggleCreatingComment.bind(this);
     this.submitThread = this.submitThread.bind(this);
+    this.submitComment = this.submitComment.bind(this);
   }
 
   handleChange = (panel, thread_id) => (event, expanded) => {
-    console.log(expanded);
     this.setState({
       expanded: expanded ? panel : false
     });
@@ -95,7 +97,7 @@ class ThreadComponent extends React.Component {
           currentThreads[selectedThreadIndex].comments = res.data;
           this.setState({threads: currentThreads});
         },
-        err => console.log(err)
+        err => this.props.dispatch(snackbarActions.open(`${err}`))
       );
   }
 
@@ -104,12 +106,21 @@ class ThreadComponent extends React.Component {
     this.setState({creatingThread});
   }
 
+  toggleCreatingComment() {
+    const creatingComment = !this.state.creatingComment;
+    this.setState({creatingComment});
+  }
+
   handleThreadChange(e) {
     const { form } = this.state;
     const { name, value } = e.target;
 
     form[name] = value;
     this.setState({ form });
+  }
+
+  handleCommentChange(e) {
+    this.setState({commentText: e.target.value});
   }
 
   submitThread() {
@@ -134,8 +145,32 @@ class ThreadComponent extends React.Component {
       );
   }
 
+  submitComment = (thread_id) => () => {
+    const commentData = {
+      thread_id,
+      parent_id: null,
+      user_id: this.props.user_id,
+      text: this.state.commentText
+    };
+
+    commentsService.create(commentData)
+      .then(
+        res => {
+          this.getComments(thread_id);
+          this.setState({commentText: '', creatingComment: false});
+          this.props.dispatch(snackbarActions.open(`${res.data.message}`));
+        },
+        err => this.props.dispatch(snackbarActions.open(`${err}`))
+      );
+  }
+
   render() {
-    const { threads, expanded, creatingThread, threadDescription } = this.state;
+    const { threads,
+            expanded,
+            creatingThread,
+            creatingComment,
+            commentText,
+            form } = this.state;
     const { classes } = this.props;
 
     return(
@@ -158,7 +193,7 @@ class ThreadComponent extends React.Component {
                   placeholder="Title"
                   className={classes.textField}
                   margin="normal"
-                  value={this.state.form.threadTitle}
+                  value={form.threadTitle}
                   onChange={(e) => this.handleThreadChange(e)}
                 />
                 <TextField
@@ -198,8 +233,46 @@ class ThreadComponent extends React.Component {
                 <ExpansionPanelDetails>
                   <div className={classes.root}>
                     <div>{thread.description}</div>
-                    {thread.comments && <Comments comments={thread.comments} />}
-                    {!thread.num_comments && <span>There are currently no comments for this thread.</span>}
+                    <div className={classes.actionsContainer}>
+                      <span className={classes.flex}></span>
+                      <Button className={classes.button} variant="raised" size="small" onClick={this.toggleCreatingComment}>
+                        <Add className={classes.leftIcon} />
+                        New Comment
+                      </Button>
+                    </div>
+                    {creatingComment &&
+                      <Card>
+                        <form>
+                          <CardContent>
+                            <TextField
+                              id="textarea"
+                              name="commentText"
+                              label="Comment"
+                              placeholder="Comment"
+                              multiline
+                              className={classes.textField}
+                              margin="normal"
+                              value={commentText}
+                              onChange={(e) => this.handleCommentChange(e)}
+                            />
+                          </CardContent>
+                          <CardActions>
+                            <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.submitComment(thread.id)}>
+                              Save
+                            </Button>
+                            <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.toggleCreatingComment}>
+                              Cancel
+                            </Button>
+                          </CardActions>
+                        </form>
+                      </Card>
+                    }
+                    { thread.comments &&
+                      <Comments comments={thread.comments} />
+                    }
+                    {thread.comments && !thread.comments.length &&
+                      <span>{console.log(thread)}There are currently no comments for this thread.</span>
+                    }
                   </div>
                 </ExpansionPanelDetails>
               </ExpansionPanel>
