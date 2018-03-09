@@ -44,7 +44,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: '100%',
+    width: '50%',
   },
 });
 
@@ -57,7 +57,11 @@ class ThreadComponent extends React.Component {
       threads: null,
       expanded: null,
       creatingThread: false,
-      newThreadValue: ''
+      threadDescription: '',
+      form: {
+        threadTitle: '',
+        threadDescription: ''
+      }
     }
 
     commentsService.threads_by_poll(props.poll_id)
@@ -101,13 +105,19 @@ class ThreadComponent extends React.Component {
   }
 
   handleThreadChange(e) {
-    this.setState({newThreadValue: e.target.value});
+    const { form } = this.state;
+    const { name, value } = e.target;
+
+    form[name] = value;
+    this.setState({ form });
   }
 
   submitThread() {
+    const { form } = this.state;
     const threadData = {
       poll_id: this.props.poll_id,
-      text: this.state.newThreadValue,
+      title: form.threadTitle,
+      desc: form.threadDescription,
       user_id: this.props.user_id
     }
 
@@ -117,7 +127,7 @@ class ThreadComponent extends React.Component {
           const { threads } = this.state;
           threads.push(res.data.thread);
 
-          this.setState({threads});
+          this.setState({threads, form: {}, creatingThread: false});
           this.props.dispatch(snackbarActions.open(`${res.data.message}`));
         },
         err => this.props.dispatch(snackbarActions.open(`${err}`))
@@ -125,7 +135,7 @@ class ThreadComponent extends React.Component {
   }
 
   render() {
-    const { threads, expanded, creatingThread, newThreadValue } = this.state;
+    const { threads, expanded, creatingThread, threadDescription } = this.state;
     const { classes } = this.props;
 
     return(
@@ -141,16 +151,27 @@ class ThreadComponent extends React.Component {
           <Card>
             <form>
               <CardContent>
-              <TextField
-                id="textarea"
-                label="With placeholder multiline"
-                placeholder="Placeholder"
-                multiline
-                className={classes.textField}
-                margin="normal"
-                value={newThreadValue}
-                onChange={(e) => this.handleThreadChange(e)}
-              />
+                <TextField
+                  id="textarea"
+                  name="threadTitle"
+                  label="Thread Title"
+                  placeholder="Title"
+                  className={classes.textField}
+                  margin="normal"
+                  value={this.state.form.threadTitle}
+                  onChange={(e) => this.handleThreadChange(e)}
+                />
+                <TextField
+                  id="textarea"
+                  name="threadDescription"
+                  label="Thread Description"
+                  placeholder="Description"
+                  multiline
+                  className={classes.textField}
+                  margin="normal"
+                  value={this.state.form.threadDescription}
+                  onChange={(e) => this.handleThreadChange(e)}
+                />
               </CardContent>
               <CardActions>
                 <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.submitThread}>
@@ -172,10 +193,11 @@ class ThreadComponent extends React.Component {
                     {thread.num_comments || '0'}
                   </Avatar>
                   <Typography className={classes.secondaryHeading}>{thread.created_at} - {thread.username} - {thread.num_comments}</Typography>
-                  <Typography className={classes.heading}>{thread.text}</Typography>
+                  <Typography className={classes.heading}>{thread.title}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <div className={classes.root}>
+                    <div>{thread.description}</div>
                     {thread.comments && <Comments comments={thread.comments} />}
                     {!thread.num_comments && <span>There are currently no comments for this thread.</span>}
                   </div>
