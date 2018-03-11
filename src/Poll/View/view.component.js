@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
+// import { Link } from 'react-router-dom';
 
 import ResultsComponent from '../Results/results.component';
 import ThreadComponent from '../Thread/thread.component';
@@ -41,11 +42,18 @@ class ViewComponent extends React.Component {
             textColor="primary"
             centered
           >
+            {/* TODO: Could use something like this for routing with tabs */}
+            {/* <Tab label="Thread" component={Link} to="/results/1/Thread"/> */}
             <Tab label="Results" />
-            <Tab label="Thread" />
+            <Tab label="Thread"/>
             <Tab label="Preview" />
           </Tabs>
 
+          {/* 
+            Could route to view with /results, /thread, or /preview
+            In state, set value based on route params
+            possibly /poll/:id/<value>
+           */}
           <div className={classes.root}>
             {value === 0 && <ResultsComponent poll_id={poll_id} />}
             {value === 1 && <ThreadComponent poll_id={poll_id} />}

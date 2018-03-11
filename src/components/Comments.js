@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { Link } from 'react-router-dom';
 
 import { commentsService } from '../services';
 import { snackbarActions } from '../actions';
@@ -11,10 +12,12 @@ import Card, { CardActions, CardContent } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
+import IconButton from 'material-ui/IconButton';
+import ReplyIcon from 'material-ui-icons/Reply';
 
 const styles = theme => ({
   comment: {
-    marginLeft: '15px'
+    marginLeft: '15px',
   },
   card: {
     width: '100%',
@@ -26,6 +29,17 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: '100%',
   },
+  commentDetails: {
+    fontSize: theme.typography.pxToRem(12),
+    color: theme.palette.text.secondary,
+    marginBottom: '15px'
+  },
+  commentActions: {
+    // fontSize: theme.typography.pxToRem(12),
+    // color: theme.palette.text.secondary,
+    // marginTop: '15px',
+    // marginBottom: '15px'
+  }
 });
 
 class Comments extends React.Component {
@@ -41,16 +55,6 @@ class Comments extends React.Component {
     this.cancelComment = this.cancelComment.bind(this);
     this.submitComment = this.submitComment.bind(this);
   }
-
-  // componentDidMount() {
-  //   this.setState({comments: this.props.comments});
-  //   console.log(this.state.comments);
-  // }
-
-  // componentWillReceiveProps(newProps) {
-  //   console.log('HELLO');
-  //   this.setState({comments: newProps.comments});
-  // }
 
   reply = (comment_id) => (e) => {
     e.preventDefault();
@@ -99,10 +103,19 @@ class Comments extends React.Component {
               <Card key={c.id} className={classes.card}>
                 <CardContent>
                   <div className={classes.comment}>
-                    <div>{c.text}</div>
-                    <div>Created by: {c.username}</div>
-                    <div>Created at: {c.created_at}</div>
-                    <span onClick={this.reply(c.id)}>reply</span>
+                    <div className={classes.commentDetails}>
+                      <Link to={`/profile/${c.username}`}>{c.username}</Link>
+                      <span> - {`${new Date(c.created_at).toDateString()}`}</span>
+                    </div>
+                    <div>
+                      <span>{c.text}</span>
+                    </div>
+                    <div className={classes.commentActions}>
+                      {/* <a href="javascript:void(0)" onClick={this.reply(c.id)}>reply</a> */}
+                      <IconButton color="secondary" className={classes.button} aria-label="Reply to comment." onClick={this.reply(c.id)}>
+                        <ReplyIcon>alarm</ReplyIcon>
+                      </IconButton>
+                    </div>
                     {isReplying === c.id &&
                       <Card>
                         <form autoComplete="off">
@@ -130,7 +143,7 @@ class Comments extends React.Component {
                       </Card>
                     }
                     {c.comments && c.comments.length && 
-                      <div><Comments dispatch={dispatch} classes={classes} comments={c.comments} user_id={user_id} /></div>
+                      <Comments dispatch={dispatch} classes={classes} comments={c.comments} user_id={user_id} />
                     }
                   </div>
                 </CardContent>

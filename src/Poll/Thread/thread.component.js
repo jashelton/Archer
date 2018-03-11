@@ -10,13 +10,12 @@ import { snackbarActions } from '../../actions';
 
 // Material
 import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary } from 'material-ui/ExpansionPanel';
-import Typography from 'material-ui/Typography';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
-import Avatar from 'material-ui/Avatar';
 import Button from 'material-ui/Button';
 import Add from 'material-ui-icons/Add';
 import TextField from 'material-ui/TextField';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 
 const styles = theme => ({
   root: {
@@ -32,7 +31,7 @@ const styles = theme => ({
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
-    flexBasis: '25%',
+    flexBasis: '10%',
     flexShrink: 0,
   },
   leftIcon: {
@@ -46,6 +45,10 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: '50%',
   },
+  threadDescription: {
+    padding: '25px',
+    backgroundColor: 'rgba(55, 72, 172, 0.2)'
+  }
 });
 
 class ThreadComponent extends React.Component {
@@ -221,62 +224,84 @@ class ThreadComponent extends React.Component {
         }
         { threads &&
           <div>
-            {threads.map((thread, index) => (
-              <ExpansionPanel key={index} expanded={expanded === `panel${index}`} onChange={this.handleChange(`panel${index}`, thread.id)}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Avatar className={classes.avatar}>
-                    {thread.num_comments || '0'}
-                  </Avatar>
-                  <Typography className={classes.secondaryHeading}>{thread.created_at} - {thread.username} - {thread.num_comments}</Typography>
-                  <Typography className={classes.heading}>{thread.title}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <div className={classes.root}>
-                    <div>{thread.description}</div>
-                    <div className={classes.actionsContainer}>
-                      <span className={classes.flex}></span>
-                      <Button className={classes.button} variant="raised" size="small" onClick={this.toggleCreatingComment}>
-                        <Add className={classes.leftIcon} />
-                        New Comment
-                      </Button>
-                    </div>
-                    {creatingComment &&
-                      <Card>
-                        <form>
-                          <CardContent>
-                            <TextField
-                              id="textarea"
-                              name="commentText"
-                              label="Comment"
-                              placeholder="Comment"
-                              multiline
-                              className={classes.textField}
-                              margin="normal"
-                              value={commentText}
-                              onChange={(e) => this.handleCommentChange(e)}
-                            />
-                          </CardContent>
-                          <CardActions>
-                            <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.submitComment(thread.id)}>
-                              Save
-                            </Button>
-                            <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.toggleCreatingComment}>
-                              Cancel
-                            </Button>
-                          </CardActions>
-                        </form>
-                      </Card>
-                    }
-                    { thread.comments &&
-                      <Comments comments={thread.comments} />
-                    }
-                    {thread.comments && !thread.comments.length &&
-                      <span>{console.log(thread)}There are currently no comments for this thread.</span>
-                    }
-                  </div>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            ))}
+            { threads.length > 0 &&
+              <div>
+                {threads.map((thread, index) => (
+                  <ExpansionPanel key={index} expanded={expanded === `panel${index}`} onChange={this.handleChange(`panel${index}`, thread.id)}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                      <div className={classes.secondaryHeading}>Ranking</div>
+                      <List dense={true}>
+                        <ListItem>
+                          <ListItemText
+                            primary={thread.title}
+                            secondary={
+                              `Created on: ${new Date(thread.created_at).toDateString()}
+                              By: ${thread.username}
+                              - ${thread.num_comments} comment${thread.num_comments !== 1 ? 's' : ''}`
+                            }
+                          />
+                        </ListItem>
+                      </List>
+                      {/* <Avatar className={classes.avatar}>
+                        {thread.num_comments || '0'}
+                      </Avatar>
+                      <Typography className={classes.secondaryHeading}>{thread.created_at} - {thread.username} - {thread.num_comments}</Typography>
+                      <Typography className={classes.heading}>{thread.title}</Typography> */}
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                      <div className={classes.root}>
+                        <div className={classes.threadDescription}>{thread.description}</div>
+                        <div className={classes.actionsContainer}>
+                          <span className={classes.flex}></span>
+                          <Button className={classes.button} variant="raised" size="small" onClick={this.toggleCreatingComment}>
+                            <Add className={classes.leftIcon} />
+                            New Comment
+                          </Button>
+                        </div>
+                        {creatingComment &&
+                          <Card>
+                            <form>
+                              <CardContent>
+                                <TextField
+                                  id="textarea"
+                                  name="commentText"
+                                  label="Comment"
+                                  placeholder="Comment"
+                                  multiline
+                                  className={classes.textField}
+                                  margin="normal"
+                                  value={commentText}
+                                  onChange={(e) => this.handleCommentChange(e)}
+                                />
+                              </CardContent>
+                              <CardActions>
+                                <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.submitComment(thread.id)}>
+                                  Save
+                                </Button>
+                                <Button className={classes.button} color="primary" dense={true} variant="raised" size="small" onClick={this.toggleCreatingComment}>
+                                  Cancel
+                                </Button>
+                              </CardActions>
+                            </form>
+                          </Card>
+                        }
+                        { thread.comments &&
+                          <Comments comments={thread.comments} />
+                        }
+                        { thread.comments && !thread.comments.length &&
+                          <span>There are currently no comments for this thread.</span>
+                        }
+                      </div>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                ))}
+              </div>
+            }
+            {!threads.length > 0 &&
+              <div>
+                <span>There are currently no threads for this poll.</span>
+              </div>
+            }
           </div>
         }
       </div>

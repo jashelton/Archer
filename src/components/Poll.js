@@ -8,17 +8,20 @@ import { pollService } from '../services';
 
 // Material
 import { withStyles } from 'material-ui/styles';
-import Card, { CardActions, CardHeader } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import { snackbarActions } from '../actions';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 
-const styles = {
+const styles = theme => ({
   card: {
     width: '100%',
     marginBottom: '5px'
   },
-};
+  demo: {
+    backgroundColor: theme.palette.background.paper,
+  },
+});
 
 class Poll extends React.Component {
   constructor(props) {
@@ -73,33 +76,40 @@ class Poll extends React.Component {
     const { classes, question, authentication } = this.props;
 
     return(
-      <Card className={classes.card}>
-        <CardHeader
-          title={question.question}
-          subheader={
+      <div className={classes.demo}>
+        <List dense={false}>
+          <ListItem>
+            <ListItemText
+              primary={
+                <span>
+                  <Link to={`/question/${question.id}`}>{question.question}</Link>
+                </span>
+              }
+              secondary={
+                <span>
+                  <span>Created by: <Link to={`/profile/${question.created_by}`}>{question.created_by}</Link> - </span>
+                  <span>{question.responses} response{question.responses !== 1 ? 's' : ''} - </span>
+                  <span>{question.question_count} questions</span>
+                </span>
+              }
+            />
             <div>
-              <span>Created by: <Link to={`/profile/${question.created_by}`}>{question.created_by}</Link></span>
-              <span> - {question.responses} response{question.responses !== 1 ? 's' : ''}</span>
-              <span> - {question.question_count} questions</span>
+              {/* <Button dense={true} color="primary">
+                Share
+              </Button> */}
+              { authentication.loggedIn &&
+                <Button dense={true} color="primary" onClick={this.toggleFavorite}>
+                  <Icon className={classes.leftIcon}>{question.favorite ? 'check': 'add'}</Icon>
+                  My List
+                </Button>
+              }
+              <Button dense={true} component={Link} to={`/question/${question.id}`}>
+                View
+              </Button>
             </div>
-          }
-        />
-        <CardActions>
-          {/* <Button dense color="primary">
-            Share
-          </Button> */}
-          {
-            authentication.loggedIn &&
-            <Button dense color="primary" onClick={this.toggleFavorite}>
-              <Icon className={classes.leftIcon}>{question.favorite ? 'check': 'add'}</Icon>
-              My List
-            </Button>
-          }
-          <Button component={Link} to={`/question/${question.id}`}>
-            View
-          </Button>
-        </CardActions>
-      </Card>
+          </ListItem>
+        </List>
+      </div>
     )
   }
 }
