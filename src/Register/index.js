@@ -35,7 +35,6 @@ class RegisterPage extends React.Component {
     this.props.dispatch(userActions.logout());
 
     this.state = {
-      name: '',
       username: '',
       password: '',
       confirm_password: ''
@@ -86,15 +85,6 @@ class RegisterPage extends React.Component {
           />
           <form onSubmit={this.handleSubmit}>
             <CardContent>
-              <TextField
-                id="name"
-                label="Name"
-                name="name"
-                className={classes.textField}
-                value={this.state.name}
-                onChange={this.handleChange}
-                margin="normal"
-              />
               <TextField
                 id="username"
                 label="Username"

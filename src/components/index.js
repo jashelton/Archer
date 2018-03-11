@@ -5,3 +5,4 @@ export * from './NavData.js';
 export * from './Poll.js';
 export * from './PlotlyPieChart.js';
 export * from './Ad.js';
+export * from './Comments.js';

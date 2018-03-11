@@ -21,6 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "set 'REACT_APP_BASEURL=ec2-34-238-252-220.compute-1.amazonaws.com:8080' && npm run build && cd build && mv index.html 200.html && surge . --domain answeredit.surge.sh",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

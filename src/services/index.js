@@ -5,3 +5,4 @@ export * from './user-service';
 export * from './poll-service';
 export * from './results-service';
 export * from './bookmark-service';
+export * from './comments-service';
