@@ -4,12 +4,14 @@ import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { pollService } from '../services';
+import { pollService, rankingService } from '../services';
+import Ranking from '../components/Ranking';
 
 // Material
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
 import { snackbarActions } from '../actions';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
@@ -21,6 +23,9 @@ const styles = theme => ({
   demo: {
     backgroundColor: theme.palette.background.paper,
   },
+  ranking: {
+    flexBasis: '5%',
+  }
 });
 
 class Poll extends React.Component {
@@ -34,6 +39,7 @@ class Poll extends React.Component {
     this.toggleFavorite = this.toggleFavorite.bind(this);
     this.addFavorite = this.addFavorite.bind(this);
     this.deleteFavorite = this.deleteFavorite.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   toggleFavorite() {
@@ -49,10 +55,7 @@ class Poll extends React.Component {
           this.setState({question});
           this.props.dispatch(snackbarActions.open('You have successfully added a poll to your list.'));
         },
-        err => {
-          this.props.dispatch(snackbarActions.open(`Error: ${err}`))
-          console.log('error', err);
-        }
+        err => this.props.dispatch(snackbarActions.open(`Error: ${err}`))
       );
   }
 
@@ -65,11 +68,29 @@ class Poll extends React.Component {
           this.setState({question});
           this.props.dispatch(snackbarActions.open('You have successfully removed a poll from your list.'));
         },
-        err => {
-          this.props.dispatch(snackbarActions.open(`Error: ${err}`));
-          console.log('Error', err);
-        }
+        err => this.props.dispatch(snackbarActions.open(`Error: ${err}`))
       )
+  }
+
+  handleChange(value) {
+    const { id, user_rank } = this.state.question;
+    const rankData = {
+      poll_id: id,
+      user_id: this.props.authentication.user.current_user.id,
+      user_rank,
+      value
+    };
+    rankingService.createOrUpdatePollRanking(rankData)
+      .then(
+        res => {
+          let { question } = this.state;
+          question.total_rank = res.data.data.total_rank;
+          question.user_rank = value;
+          this.setState({question});
+          this.props.dispatch(snackbarActions.open(res.data.message));
+        },
+        err => this.props.dispatch(snackbarActions.open(`Error: ${err}`))
+      );
   }
 
   render() {
@@ -79,6 +100,9 @@ class Poll extends React.Component {
       <div className={classes.demo}>
         <List dense={false}>
           <ListItem>
+            <div className={classes.ranking}>
+              <Ranking selected_rank={question.user_rank} rank={question.total_rank} onChange={this.handleChange} />
+            </div>
             <ListItemText
               primary={
                 <span>
