@@ -19,9 +19,6 @@ const styles = theme => ({
 });
 
 class Ranking extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    this.setState({rank: nextProps.rank, selected_rank: nextProps.selected_rank});
-  }
 
   updateRank = (value) => (e) => {
     const selected_rank = value === this.props.selected_rank ? 0 : value;

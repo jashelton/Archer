@@ -229,7 +229,6 @@ class ThreadComponent extends React.Component {
                 {threads.map((thread, index) => (
                   <ExpansionPanel key={index} expanded={expanded === `panel${index}`} onChange={this.handleChange(`panel${index}`, thread.id)}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <div className={classes.secondaryHeading}>Ranking</div>
                       <List dense={true}>
                         <ListItem>
                           <ListItemText
@@ -242,11 +241,6 @@ class ThreadComponent extends React.Component {
                           />
                         </ListItem>
                       </List>
-                      {/* <Avatar className={classes.avatar}>
-                        {thread.num_comments || '0'}
-                      </Avatar>
-                      <Typography className={classes.secondaryHeading}>{thread.created_at} - {thread.username} - {thread.num_comments}</Typography>
-                      <Typography className={classes.heading}>{thread.title}</Typography> */}
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                       <div className={classes.root}>

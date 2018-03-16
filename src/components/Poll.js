@@ -95,7 +95,7 @@ class Poll extends React.Component {
 
   render() {
     const { classes, question, authentication } = this.props;
-
+    
     return(
       <div className={classes.demo}>
         <List dense={false}>
