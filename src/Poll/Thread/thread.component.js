@@ -4,18 +4,18 @@ import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { commentsService } from '../../services';
+import { commentsService, rankingService } from '../../services';
 import Comments from '../../components/Comments.js';
 import { snackbarActions } from '../../actions';
+import Ranking from '../../components/Ranking';
 
 // Material
-import ExpansionPanel, { ExpansionPanelDetails, ExpansionPanelSummary } from 'material-ui/ExpansionPanel';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import Button from 'material-ui/Button';
 import Add from 'material-ui-icons/Add';
 import TextField from 'material-ui/TextField';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import List, { ListItem, ListItemText } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
 
 const styles = theme => ({
   root: {
@@ -48,6 +48,10 @@ const styles = theme => ({
   threadDescription: {
     padding: '25px',
     backgroundColor: 'rgba(55, 72, 172, 0.2)'
+  },
+  commentsContainer: {
+    flexGrow: 1,
+    padding: '25px'
   }
 });
 
@@ -80,12 +84,9 @@ class ThreadComponent extends React.Component {
     this.submitComment = this.submitComment.bind(this);
   }
 
-  handleChange = (panel, thread_id) => (event, expanded) => {
-    this.setState({
-      expanded: expanded ? panel : false
-    });
-
-    if (expanded) {
+  handleChange = (thread_id) => () => {
+    this.setState({expanded: thread_id === this.state.expanded ? null : thread_id});
+    if (this.state.expanded > -1) {
       this.getComments(thread_id);
     }
   };
@@ -167,6 +168,29 @@ class ThreadComponent extends React.Component {
       );
   }
 
+  updateRanking = (thread_index) => (value) => {
+    const targetThread = this.state.threads[thread_index];
+    const { id, user_rank } = targetThread;
+    const rankData = {
+      thread_id: id,
+      user_id: this.props.user_id,
+      user_rank,
+      value
+    };
+
+    rankingService.createOrUpdateThreadRanking(rankData)
+      .then(
+        res => {
+          let { threads } = this.state;
+          threads[thread_index].total_rank = res.data.data.total_rank;
+          threads[thread_index].user_rank = value;
+          this.setState({threads});
+          this.props.dispatch(snackbarActions.open(res.data.message));
+        },
+        err => this.props.dispatch(snackbarActions.open(`Error: ${err}`))
+      );
+  }
+
   render() {
     const { threads,
             expanded,
@@ -227,23 +251,25 @@ class ThreadComponent extends React.Component {
             { threads.length > 0 &&
               <div>
                 {threads.map((thread, index) => (
-                  <ExpansionPanel key={index} expanded={expanded === `panel${index}`} onChange={this.handleChange(`panel${index}`, thread.id)}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <List dense={true}>
-                        <ListItem>
-                          <ListItemText
-                            primary={thread.title}
-                            secondary={
-                              `Created on: ${new Date(thread.created_at).toDateString()}
-                              By: ${thread.username}
-                              - ${thread.num_comments} comment${thread.num_comments !== 1 ? 's' : ''}`
-                            }
-                          />
-                        </ListItem>
-                      </List>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <div className={classes.root}>
+                  <div key={index}>
+                    <List dense={true}>
+                      <ListItem>
+                        <div className={classes.ranking}>
+                          <Ranking selected_rank={thread.user_rank} rank={thread.total_rank} onChange={this.updateRanking(index)} />
+                        </div>
+
+                        <ListItemText onClick={this.handleChange(thread.id)}
+                          primary={thread.title}
+                          secondary={
+                            `Created on: ${new Date(thread.created_at).toDateString()}
+                            By: ${thread.username}
+                            - ${thread.num_comments} comment${thread.num_comments !== 1 ? 's' : ''}`
+                          }
+                        />
+                      </ListItem>
+                    </List>
+                    { expanded === thread.id &&
+                      <div className={classes.commentsContainer}>
                         <div className={classes.threadDescription}>{thread.description}</div>
                         <div className={classes.actionsContainer}>
                           <span className={classes.flex}></span>
@@ -252,7 +278,7 @@ class ThreadComponent extends React.Component {
                             New Comment
                           </Button>
                         </div>
-                        {creatingComment &&
+                        { creatingComment &&
                           <Card>
                             <form>
                               <CardContent>
@@ -286,8 +312,9 @@ class ThreadComponent extends React.Component {
                           <span>There are currently no comments for this thread.</span>
                         }
                       </div>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
+                    }
+                      <Divider inset component="div" />
+                    </div>
                 ))}
               </div>
             }

@@ -11,7 +11,6 @@ import Ranking from '../components/Ranking';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
 import { snackbarActions } from '../actions';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
@@ -95,7 +94,7 @@ class Poll extends React.Component {
 
   render() {
     const { classes, question, authentication } = this.props;
-    
+
     return(
       <div className={classes.demo}>
         <List dense={false}>

@@ -2,7 +2,7 @@ import { SecureHeaders } from '../helpers';
 
 export const rankingService = {
   createOrUpdatePollRanking,
-  createOrUpdateCommentRanking
+  createOrUpdateThreadRanking
 }
 
 function createOrUpdatePollRanking(data) {
@@ -18,6 +18,15 @@ function createOrUpdatePollRanking(data) {
     });
 }
 
-function createOrUpdateCommentRanking(data) {
-  const requestOptions = SecureHeaders.requestOptions('POST');
+function createOrUpdateThreadRanking(data) {
+  const requestOptions = SecureHeaders.requestOptions('POST', data);
+
+  return fetch(`${process.env.REACT_APP_BASEURL}/ranking/${data.thread_id}/threads`, requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(response.statusText);
+      }
+
+      return response.json();
+    });
 }
