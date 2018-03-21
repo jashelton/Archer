@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -11,6 +12,7 @@ import Grid from 'material-ui/Grid';
 import Icon from 'material-ui/Icon';
 import Avatar from 'material-ui/Avatar';
 import List, { ListItem, ListItemAvatar, ListItemText } from 'material-ui/List';
+import Button from 'material-ui/Button';
 
 const styles = theme => ({
   root: {
@@ -41,18 +43,23 @@ class ProfilePage extends React.Component {
 
   componentWillMount() {
     const user = this.props.match.params.user;
+    const current_user = this.props.authentication.user.current_user.id;
     this.setState({user});
 
-    profileService.created(user)
+    profileService.created(user, current_user)
       .then(
         polls => { this.setState({data: polls.data}) },
         error => console.log('error', error) // If the user doesn't exist, should redirect to 404
       )
   }
 
+  followUser() {
+    console.log('follow');
+  }
+
   render() {
     const { data, user } = this.state;
-    const { classes } = this.props;
+    const { classes, authentication } = this.props;
 
     return(
       <div>
@@ -63,7 +70,29 @@ class ProfilePage extends React.Component {
               <Grid item xs={12}>
                 <Card>
                   <CardContent>
-                    {user}
+                    <div>
+                      {user}
+                    </div>
+                    <div>
+                      Following {data.social.following}
+                    </div>
+                    <div>
+                      Followers {data.social.followers}
+                    </div>
+                    { user !== authentication.user.current_user.username &&
+                      <div>
+                        { !data.social.is_following &&
+                          <Button raised={true} color="primary" className={classes.button} onClick={this.followUser}>
+                            Follow
+                          </Button>
+                        }
+                        { data.social.is_following &&
+                          <Button raised={true} color="primary" className={classes.button} onClick={this.followUser}>
+                            Unfollow
+                          </Button>
+                        }
+                      </div>
+                    }
                   </CardContent>
                 </Card>
               </Grid>
@@ -76,7 +105,7 @@ class ProfilePage extends React.Component {
                   <CardContent>
                     <div className={classes.demo}>
                       <List dense={true}>
-                        {data.map(action => (
+                        {data.activity.map(action => (
                           <ListItem key={action.id}>
                             <ListItemAvatar>
                               <Avatar>
@@ -106,4 +135,13 @@ ProfilePage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProfilePage);
+function mapStateToProps(state) {
+  const { authentication } = state;
+
+  return {
+    authentication
+  };
+}
+
+const connectedProfilePage = connect(mapStateToProps)(ProfilePage);
+export default withStyles(styles)(connectedProfilePage);

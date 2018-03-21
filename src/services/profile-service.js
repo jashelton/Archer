@@ -4,10 +4,10 @@ export const profileService = {
   created
 };
 
-function created(user) {
+function created(user, current_user) {
   const requestOptions = SecureHeaders.requestOptions('GET');
 
-  return fetch(`${process.env.REACT_APP_BASEURL}/polls/${user}`, requestOptions).then(handleResponse);
+  return fetch(`${process.env.REACT_APP_BASEURL}/polls/${user}/${current_user}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
