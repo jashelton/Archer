@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { profileService } from '../services';
+import { profileService, followsService } from '../services';
+import { snackbarActions } from '../actions';
 
 // Material
 import { withStyles } from 'material-ui/styles';
@@ -38,7 +39,9 @@ class ProfilePage extends React.Component {
     };
 
     // Could display /:username in the url, but pass user_id into the service to prevent the backend from having the get user.
-
+    this.handleFollowing = this.handleFollowing.bind(this);
+    this.followUser = this.followUser.bind(this);
+    this.unfollowUser = this.unfollowUser.bind(this);
   }
 
   componentWillMount() {
@@ -49,12 +52,44 @@ class ProfilePage extends React.Component {
     profileService.created(user, current_user)
       .then(
         polls => { this.setState({data: polls.data}) },
-        error => console.log('error', error) // If the user doesn't exist, should redirect to 404
-      )
+        error => this.props.dispatch(snackbarActions.open(`${error}`)) // If the user doesn't exist, should redirect to 404
+      );
+  }
+
+  handleFollowing() {
+    this.state.data.social.is_following ? this.unfollowUser() : this.followUser();
   }
 
   followUser() {
-    console.log('follow');
+    followsService.follow(this.state.data.user_id, this.props.authentication.user.current_user.id)
+      .then(
+        res => {
+          const { data } = this.state;
+          const social = data.social;
+
+          social.is_following = 1;
+          social.followers ++;
+
+          this.setState({data});
+          this.props.dispatch(snackbarActions.open(`${res.data} ${this.state.user}`));
+        },
+        error => this.props.dispatch(snackbarActions.open(`${error}`))
+      );
+  }
+
+  unfollowUser() {
+    followsService.unfollow(this.state.data.user_id, this.props.authentication.user.current_user.id)
+      .then(
+        res => {
+          const { data } = this.state;
+          const social = this.state.data.social;
+          social.is_following = 0;
+          social.followers --;
+          this.setState({data});
+          this.props.dispatch(snackbarActions.open(`${res.data} ${this.state.user}`))
+        },
+        error => this.props.dispatch(snackbarActions.open(`${error}`))
+      );
   }
 
   render() {
@@ -81,16 +116,9 @@ class ProfilePage extends React.Component {
                     </div>
                     { user !== authentication.user.current_user.username &&
                       <div>
-                        { !data.social.is_following &&
-                          <Button raised={true} color="primary" className={classes.button} onClick={this.followUser}>
-                            Follow
-                          </Button>
-                        }
-                        { data.social.is_following &&
-                          <Button raised={true} color="primary" className={classes.button} onClick={this.followUser}>
-                            Unfollow
-                          </Button>
-                        }
+                        <Button raised={true} color="primary" className={classes.button} onClick={this.handleFollowing}>
+                          {data.social.is_following ? 'Unfollow' : 'Follow'}
+                        </Button>
                       </div>
                     }
                   </CardContent>

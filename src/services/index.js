@@ -7,3 +7,4 @@ export * from './results-service';
 export * from './bookmark-service';
 export * from './comments-service';
 export * from './ranking-service';
+export * from './follows-service';
